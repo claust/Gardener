@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 static class Globals
 {
-    public static int WorldSize = 20;
+    public const int WorldSize = 20;
 }

@@ -17,7 +17,9 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        var pos = transform.position;
+        pos.x = Globals.WorldSize / 2;
+        transform.position = pos;
     }
 
     // Update is called once per frame

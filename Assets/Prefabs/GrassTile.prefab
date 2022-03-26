@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7923678715175791284}
   - component: {fileID: 8007602518359007871}
   m_Layer: 0
-  m_Name: DirtTile
+  m_Name: GrassTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2a9bdf0a035a386409cc2c99200cc1b9, type: 2}
+  - {fileID: 2100000, guid: c62c03cd97af2764c964ade49065e7bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,3 +109,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cursor: {fileID: 0}
+  GameManager: {fileID: 0}
