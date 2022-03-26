@@ -152,7 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bffe369e933efd346bf05017287310c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TilePrefab: {fileID: 7923678715175791287, guid: 6155821cb83e76948959a17f70889c49, type: 3}
+  DirtTile: {fileID: 7923678715175791287, guid: 6155821cb83e76948959a17f70889c49, type: 3}
+  GrassTile: {fileID: 7923678715175791287, guid: 6735e0122a5ba8c45861917407a39faa, type: 3}
   Cursor: {fileID: 1565647190}
   Parent: {fileID: 0}
 --- !u!4 &158463842
@@ -314,7 +315,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c62c03cd97af2764c964ade49065e7bc, type: 2}
+  - {fileID: 2100000, guid: 9745dda083430be4f9b01388d559c217, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

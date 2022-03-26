@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     GameObject[,] _tiles;
 
-    float _tileMargin = 0.02f;
+    float _tileMargin = 0f;
     float _tileWidth = 0;
     float _tileHeight = 0;
     float _prefabX
@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
                 var tileScript = tile.GetComponent<Tile>();
                 tileScript.Cursor = Cursor;
                 tileScript.GameManager = this;
+                tileScript.x = x;
+                tileScript.z = z;
                 _tiles[x, z] = tile;
             }
         }
@@ -74,7 +76,7 @@ public class GameManager : MonoBehaviour
     public void OnTileClicked(Tile tile)
     {
         Debug.Log("OnTileClicked");
-        var newTile = Instantiate(DirtTile, tile.transform.position, Quaternion.identity);
+        _tiles[tile.x, tile.z] = tile.CloneAsType(DirtTile);
         Destroy(tile);
     }
 }
