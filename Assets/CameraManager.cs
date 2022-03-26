@@ -25,10 +25,14 @@ public class CameraManager : MonoBehaviour
         float xAxisValue = Input.GetAxis("Horizontal") * Speed;
         float zAxisValue = Input.GetAxis("Vertical") * Speed;
 
+        // Clamp speed
         xAxisValue = Mathf.Clamp(xAxisValue, -MaxSpeed, MaxSpeed);
         zAxisValue = Mathf.Clamp(zAxisValue, -MaxSpeed, MaxSpeed);
+        
+        // Clamp position
         var x = Mathf.Clamp(transform.position.x + xAxisValue, XRange.x, XRange.y);
         var z = Mathf.Clamp(transform.position.z + zAxisValue, ZRange.x, ZRange.y);
+
         transform.position = new Vector3(x, transform.position.y, z);
     }
 }

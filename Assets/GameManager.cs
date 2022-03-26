@@ -9,41 +9,56 @@ public class GameManager : MonoBehaviour
     GameObject _tilePrefab;
 
     [SerializeField]
-    GameObject parent;
-
-    float prefabX { get => _tilePrefab.GetComponent<Renderer>().bounds.size.x; }
-    float prefabZ { get => _tilePrefab.GetComponent<Renderer>().bounds.size.z; }
+    GameObject Parent;
 
     [SerializeField]
-    int sizeX = 10;
-    int sizeZ = 10;
+    int SizeX = 10;
+    int SizeZ = 10;
+
+    float _tileWidth = 0;
+    float _tileHeight = 0;
+    float _prefabX
+    {
+        get
+        {
+            if (_tileWidth == 0)
+            {
+                _tileWidth = _tilePrefab.GetComponent<Renderer>().bounds.size.x;
+            }
+            return _tileWidth;
+        }
+    }
+    float _prefabZ
+    {
+        get
+        {
+            if (_tileHeight == 0)
+            {
+                _tileHeight = _tilePrefab.GetComponent<Renderer>().bounds.size.z;
+            }
+            return _tileHeight;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         CreateTiles();
-
     }
 
     private void CreateTiles()
     {
         // var parent = GameObject.FindGameObjectWithTag("tiles");
-        var px = prefabX * 1.1f;
-        var pz = prefabZ * 1.1f;
-        for (int x = 0; x < sizeX; x++)
+        var px = _prefabX * 1.1f;
+        var pz = _prefabZ * 1.1f;
+        for (int x = 0; x < SizeX; x++)
         {
-            for (int z = 0; z < sizeZ; z++)
+            for (int z = 0; z < SizeZ; z++)
             {
                 // Why does adding the tiles to a parent make them fall?
                 // Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity, parent.transform);
-                Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity);
+                Instantiate(_tilePrefab, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
