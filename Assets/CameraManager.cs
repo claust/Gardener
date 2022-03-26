@@ -9,14 +9,15 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     float MaxSpeed = 0.02f;
     [SerializeField]
-    Vector2 XRange = new Vector2(-10, 15);
+    Vector2 XRange = new Vector2(- 10, Globals.WorldSize + 10);
     [SerializeField]
-    Vector2 ZRange = new Vector2(-10, 8);
+    Vector2 ZRange = new Vector2(- 10, Globals.WorldSize);
 
 
     // Start is called before the first frame update
     void Start()
     {
+
     }
 
     // Update is called once per frame

@@ -11,10 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject Parent;
 
-    [SerializeField]
-    int SizeX = 10;
-    int SizeZ = 10;
-
+    float _tileMargin = 0.02f;
     float _tileWidth = 0;
     float _tileHeight = 0;
     float _prefabX
@@ -49,11 +46,11 @@ public class GameManager : MonoBehaviour
     private void CreateTiles()
     {
         // var parent = GameObject.FindGameObjectWithTag("tiles");
-        var px = _prefabX * 1.1f;
-        var pz = _prefabZ * 1.1f;
-        for (int x = 0; x < SizeX; x++)
+        var px = _prefabX * (1 + _tileMargin);
+        var pz = _prefabZ * (1 + _tileMargin);
+        for (int x = 0; x < Globals.WorldSize; x++)
         {
-            for (int z = 0; z < SizeZ; z++)
+            for (int z = 0; z < Globals.WorldSize; z++)
             {
                 // Why does adding the tiles to a parent make them fall?
                 // Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity, parent.transform);
