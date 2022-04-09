@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class TileScript : MonoBehaviour
 {
     public GameObject Cursor;
     public GameManager GameManager;
@@ -10,11 +10,13 @@ public class Tile : MonoBehaviour
     public int x;
     public int z;
 
-    public GameObject CloneAsType(GameObject tile)
+    bool _tileClickedAtLeastOnce = false;
+
+    public GameObject CloneAsType(GameObject tilePrefab)
     {
-        var newTile = Instantiate(tile, transform.position, Quaternion.identity);
+        var newTile = Instantiate(tilePrefab, transform.position, Quaternion.identity);
         newTile.transform.position = newTile.transform.position + Vector3.up * 0.01f;
-        var tileScript = tile.GetComponent<Tile>();
+        var tileScript = tilePrefab.GetComponent<TileScript>();
         tileScript.Cursor = Cursor;
         tileScript.GameManager = GameManager;
         tileScript.x = x;
@@ -25,12 +27,19 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         GameManager.OnTileClicked(this);
+        _tileClickedAtLeastOnce = true;
     }
 
     private void OnMouseEnter()
     {
         Cursor.transform.position = transform.position + Vector3.up * 0.2f;
         Cursor.SetActive(true);
+        var mouseDown = Input.GetMouseButton(0);
+        // Debug.Log($"Mouse Down {mouseDown}");
+        if (mouseDown && !_tileClickedAtLeastOnce)
+        {
+            OnMouseDown();
+        }
     }
 
     private void OnMouseExit()

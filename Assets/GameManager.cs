@@ -1,3 +1,4 @@
+using Assets.Scripts.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,9 +7,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject DirtTile;
+    GameObject DirtPrefab;
     [SerializeField]
-    GameObject GrassTile;
+    GameObject GrassPrefab;
 
     [SerializeField]
     public GameObject Cursor;
@@ -16,7 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject Parent;
 
-    GameObject[,] _tiles;
+    ToolType _selectedTool = ToolType.GrassRemover;
+
+    Tile[,] _tiles;
 
     float _tileMargin = 0f;
     float _tileWidth = 0;
@@ -27,7 +30,7 @@ public class GameManager : MonoBehaviour
         {
             if (_tileWidth == 0)
             {
-                _tileWidth = DirtTile.GetComponent<Renderer>().bounds.size.x;
+                _tileWidth = DirtPrefab.GetComponent<Renderer>().bounds.size.x;
             }
             return _tileWidth;
         }
@@ -38,7 +41,7 @@ public class GameManager : MonoBehaviour
         {
             if (_tileHeight == 0)
             {
-                _tileHeight = DirtTile.GetComponent<Renderer>().bounds.size.z;
+                _tileHeight = DirtPrefab.GetComponent<Renderer>().bounds.size.z;
             }
             return _tileHeight;
         }
@@ -52,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void CreateTiles()
     {
-        _tiles = new GameObject[Globals.WorldSize, Globals.WorldSize];
+        _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
         // var parent = GameObject.FindGameObjectWithTag("tiles");
         var px = _prefabX * (1 + _tileMargin);
         var pz = _prefabZ * (1 + _tileMargin);
@@ -62,21 +65,56 @@ public class GameManager : MonoBehaviour
             {
                 // Why does adding the tiles to a parent make them fall?
                 // Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity, parent.transform);
-                var tile = Instantiate(GrassTile, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
-                var tileScript = tile.GetComponent<Tile>();
+                var tile = Instantiate(GrassPrefab, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
+                var tileScript = tile.GetComponent<TileScript>();
                 tileScript.Cursor = Cursor;
                 tileScript.GameManager = this;
                 tileScript.x = x;
                 tileScript.z = z;
-                _tiles[x, z] = tile;
+                _tiles[x, z] = new Tile(TileType.Grass);
             }
         }
     }
 
-    public void OnTileClicked(Tile tile)
+    public void OnToolClicked(ToolType toolClicked)
+    {
+        Debug.Log($"OnToolClicked: {toolClicked}");
+    }
+
+    public void OnTileClicked(TileScript tile)
     {
         Debug.Log("OnTileClicked");
-        _tiles[tile.x, tile.z] = tile.CloneAsType(DirtTile);
-        Destroy(tile);
+        switch (_selectedTool)
+        {
+            case ToolType.None:
+                Debug.Log("No tool selected");
+                break;
+            case ToolType.GrassRemover:
+                RemoveGrass(tile);
+                break;
+            case ToolType.WateringCan:
+                break;
+        }
+
     }
+
+    void RemoveGrass(TileScript tile)
+    {
+        Debug.Log("RemoveGrass");
+        if (_tiles[tile.x, tile.z].Type == TileType.Grass)
+        {
+            Debug.Log("Removing grass");
+            _tiles[tile.x, tile.z] = new Tile(TileType.Dirt);
+            var newTile = tile.CloneAsType(DirtPrefab);
+            Destroy(tile);
+        } else
+        {
+            Debug.Log("No grass to remove on this tile");
+        }
+    }
+}
+
+public enum ToolType
+{
+    None, GrassRemover, WateringCan
 }
