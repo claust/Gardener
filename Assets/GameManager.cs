@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject Cursor;
 
     [SerializeField]
-    GameObject Parent;
+    Button ToolGrassRemover;
 
     ToolType _selectedTool = ToolType.GrassRemover;
 
@@ -51,6 +52,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         CreateTiles();
+        ToolGrassRemover.onClick.AddListener(() =>
+        {
+            Debug.Log("GrassRemoverToolSelected");
+        });
     }
 
     private void CreateTiles()
