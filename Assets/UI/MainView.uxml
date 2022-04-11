@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: center; justify-content: center; background-color: rgba(137, 46, 61, 255);">
+        <ui:VisualElement style="flex-direction: row; height: 350px;">
+            <ui:ListView focusable="true" name="ToolList" style="width: 230px; margin-left: 6px; background-color: rgba(94, 29, 81, 255); border-left-color: rgb(43, 19, 38); border-right-color: rgb(43, 19, 38); border-top-color: rgb(43, 19, 38); border-bottom-color: rgb(43, 19, 38); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px;" />
+            <ui:VisualElement style="align-items: flex-end; justify-content: space-between;">
+                <ui:VisualElement name="ToolDetails" style="width: 276px; align-items: center; justify-content: center; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px; background-color: rgba(173, 10, 124, 255); border-left-color: rgba(77, 9, 60, 255); border-right-color: rgba(77, 9, 60, 255); border-top-color: rgba(77, 9, 60, 255); border-bottom-color: rgba(77, 9, 60, 255); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px;">
+                    <ui:VisualElement style="width: 120px; height: 120px; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px;">
+                        <ui:VisualElement name="ToolImage" style="flex-grow: 1; -unity-background-scale-mode: scale-to-fit;" />
+                    </ui:VisualElement>
+                    <ui:Label text="Label" display-tooltip-when-elided="true" name="ToolName" style="-unity-font-style: bold; font-size: 18px;" />
+                </ui:VisualElement>
+                <ui:Button text="Select Tool" display-tooltip-when-elided="true" name="SelectToolButton" style="background-color: rgb(173, 10, 124); border-left-color: rgb(77, 9, 60); border-right-color: rgb(77, 9, 60); border-top-color: rgb(77, 9, 60); border-bottom-color: rgb(77, 9, 60); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; margin-left: 6px; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
