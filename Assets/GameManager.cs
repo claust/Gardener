@@ -15,9 +15,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject Cursor;
 
-    [SerializeField]
-    Button ToolGrassRemover;
-
     ToolType _selectedTool = ToolType.GrassRemover;
 
     Tile[,] _tiles;
@@ -52,10 +49,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         CreateTiles();
-        ToolGrassRemover.onClick.AddListener(() =>
-        {
-            Debug.Log("GrassRemoverToolSelected");
-        });
     }
 
     private void CreateTiles()
@@ -84,6 +77,7 @@ public class GameManager : MonoBehaviour
     public void OnToolClicked(ToolType toolClicked)
     {
         Debug.Log($"OnToolClicked: {toolClicked}");
+        _selectedTool = toolClicked;
     }
 
     public void OnTileClicked(TileScript tile)
@@ -98,9 +92,23 @@ public class GameManager : MonoBehaviour
                 RemoveGrass(tile);
                 break;
             case ToolType.WateringCan:
+                Water(tile);
                 break;
         }
 
+    }
+
+    private void Water(TileScript tile)
+    {
+        Debug.Log("Water");
+        if (_tiles[tile.x, tile.z].Type == TileType.Dirt)
+        {
+            Debug.Log("Watering dirt");
+        }
+        else
+        {
+            Debug.Log("No dirt to water on this tile");
+        }
     }
 
     void RemoveGrass(TileScript tile)
@@ -112,7 +120,8 @@ public class GameManager : MonoBehaviour
             _tiles[tile.x, tile.z] = new Tile(TileType.Dirt);
             var newTile = tile.CloneAsType(DirtPrefab);
             Destroy(tile);
-        } else
+        }
+        else
         {
             Debug.Log("No grass to remove on this tile");
         }

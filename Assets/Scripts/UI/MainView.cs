@@ -12,12 +12,33 @@ namespace Assets.Scripts.UI
     {
         [SerializeField]
         private VisualTreeAsset template;
+        private UIDocument _uiDocument;
+        private GameManager _gameManager;
 
         private void OnEnable()
         {
-            var uiDocument = GetComponent<UIDocument>();
-            var toolController = new ToolListController();
-            toolController.InitializeToolList(uiDocument.rootVisualElement, template);
+            _uiDocument = GetComponent<UIDocument>();
+            // var toolController = new ToolListController();
+            // toolController.InitializeToolList(uiDocument.rootVisualElement, template);
+            var gameManagerObject = GameObject.FindGameObjectWithTag("GameController");
+            _gameManager = gameManagerObject.GetComponent<GameManager>();
+            SetupTools();
+        }
+
+        private void SetupTools()
+        {
+            var toolGrassRemover = _uiDocument.rootVisualElement.Q<Button>("GrassRemoverToolButton");
+            toolGrassRemover.clickable.clicked += () =>
+            {
+                Debug.Log("GrassRemover selected");
+                _gameManager.OnToolClicked(ToolType.GrassRemover);
+            };
+            var toolWateringCan = _uiDocument.rootVisualElement.Q<Button>("WateringCanToolButton");
+            toolWateringCan.clickable.clicked += () =>
+            {
+                Debug.Log("WateringCan selected");
+                _gameManager.OnToolClicked(ToolType.WateringCan);
+            };
         }
     }
 }
