@@ -94,8 +94,25 @@ public class GameManager : MonoBehaviour
             case ToolType.WateringCan:
                 Water(tile);
                 break;
+            case ToolType.Seeder:
+                PlantSeed(tile);
+                break;
         }
 
+    }
+
+    private void PlantSeed(TileScript tileScript)
+    {
+        Debug.Log("Plant seed");
+        var tile = _tiles[tileScript.x, tileScript.z];
+        if (tile.Type == TileType.Dirt)
+        {
+            Debug.Log("Planting seed");
+        }
+        else
+        {
+            Debug.Log($"Can only plant seed on dirt, not on {tile.Type}");
+        }
     }
 
     private void Water(TileScript tile)
@@ -130,5 +147,6 @@ public class GameManager : MonoBehaviour
 
 public enum ToolType
 {
-    None, GrassRemover, WateringCan
+    None, GrassRemover, WateringCan,
+    Seeder
 }

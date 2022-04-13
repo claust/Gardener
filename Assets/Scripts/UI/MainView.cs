@@ -39,6 +39,12 @@ namespace Assets.Scripts.UI
                 Debug.Log("WateringCan selected");
                 _gameManager.OnToolClicked(ToolType.WateringCan);
             };
+            var toolSeeder = _uiDocument.rootVisualElement.Q<Button>("SeederToolButton");
+            toolSeeder.clickable.clicked += () =>
+            {
+                Debug.Log("Seeder selected");
+                _gameManager.OnToolClicked(ToolType.Seeder);
+            };
         }
     }
 }
