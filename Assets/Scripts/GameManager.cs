@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
                 tileScript.x = x;
                 tileScript.z = z;
                 _tiles[x, z] = new Tile(TileType.Grass);
+                tileScript.Tile = _tiles[x, z];
             }
         }
     }
@@ -115,12 +116,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Water(TileScript tile)
+    private void Water(TileScript ts)
     {
         Debug.Log("Water");
-        if (_tiles[tile.x, tile.z].Type == TileType.Dirt)
+        // var tile = _tiles[ts.x, ts.z];
+        if (ts.Tile.Type == TileType.Dirt)
         {
             Debug.Log("Watering dirt");
+            ts.Tile.Water();
         }
         else
         {
@@ -128,15 +131,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void RemoveGrass(TileScript tile)
+    void RemoveGrass(TileScript ts)
     {
         Debug.Log("RemoveGrass");
-        if (_tiles[tile.x, tile.z].Type == TileType.Grass)
+        if (_tiles[ts.x, ts.z].Type == TileType.Grass)
         {
             Debug.Log("Removing grass");
-            _tiles[tile.x, tile.z] = new Tile(TileType.Dirt);
-            var newTile = tile.CloneAsType(DirtPrefab);
-            Destroy(tile);
+            _tiles[ts.x, ts.z] = new Tile(TileType.Dirt);
+            var newTile = ts.CloneAsType(DirtPrefab, _tiles[ts.x, ts.z]);
+            Destroy(ts.gameObject);
         }
         else
         {
