@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
     GameObject DirtPrefab;
     [SerializeField]
     GameObject GrassPrefab;
+    [SerializeField]
+    GameObject TomatoSeedPrefab;
+    [SerializeField]
+    GameObject TomatoPlantPrefab;
 
     [SerializeField]
     public GameObject Cursor;
@@ -19,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     Tile[,] _tiles;
 
+    int Ticks = 0;
     float _tileMargin = 0f;
     float _tileWidth = 0;
     float _tileHeight = 0;
@@ -49,6 +54,22 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         CreateTiles();
+    }
+
+    private void FixedUpdate()
+    {
+        Ticks += 1;
+        foreach (Tile t in _tiles)
+        {
+            if (t.Plant != null)
+            {
+                t.Plant.TransitionIfNeeded(Ticks);
+            }
+        };
+        if (Ticks % 100 == 0)
+        {
+            Debug.Log($"Ticks: {Ticks}");
+        }
     }
 
     private void CreateTiles()
@@ -106,9 +127,20 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Plant seed");
         var tile = _tiles[tileScript.x, tileScript.z];
-        if (tile.Type == TileType.Dirt)
+        if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
-            Debug.Log("Planting seed");
+            var prefabX = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.x;
+            var prefabZ = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.z;
+            Debug.Log($"Planting seed at {_prefabX * tileScript.x},{_prefabZ * tileScript.z}, prefab: x {prefabX}, z {prefabZ}");
+            var pos = tileScript.gameObject.transform.position;
+            var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.1f, pos.z);
+            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoPlantPrefab }, Ticks);
+            var seed = tile.Plant.GameObject;
+            seed.transform.position = newPos;
+        }
+        else if (tile.Plant != null)
+        {
+            Debug.Log($"Cannot plant on top of {tile.Plant.Name}");
         }
         else
         {
@@ -119,7 +151,6 @@ public class GameManager : MonoBehaviour
     private void Water(TileScript ts)
     {
         Debug.Log("Water");
-        // var tile = _tiles[ts.x, ts.z];
         if (ts.Tile.Type == TileType.Dirt)
         {
             Debug.Log("Watering dirt");
@@ -150,6 +181,5 @@ public class GameManager : MonoBehaviour
 
 public enum ToolType
 {
-    None, GrassRemover, WateringCan,
-    Seeder
+    None, GrassRemover, WateringCan, Seeder
 }

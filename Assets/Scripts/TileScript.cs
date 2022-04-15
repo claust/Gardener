@@ -30,7 +30,7 @@ public class TileScript : MonoBehaviour
                 color.g = Tile.Dryness * OriginalColor.g;
                 color.b = Tile.Dryness * OriginalColor.b;
                 GetComponent<Renderer>().material.color = color;
-                Tile.WaterLevel = 0.9999f * Tile.WaterLevel;
+                Tile.WaterLevel = 0.999f * Tile.WaterLevel;
             }
         }
         else
