@@ -51,11 +51,12 @@ namespace Assets.Scripts.Models
         }
         public bool TransitionIfNeeded(int ticks)
         {
-            if (Stage < Stages - 1 && Stage < Stages && _lastStageTransitionTick + _ticksPerTransition < ticks)
+            if (Stage + 1 < Stages && _lastStageTransitionTick + _ticksPerTransition < ticks)
             {
                 Stage += 1;
                 var old = _gameObject;
                 _gameObject = GameObject.Instantiate(CurrentStagePrefab, old?.transform.position ?? Vector3.zero, old?.transform.rotation ?? Quaternion.identity);
+                _lastStageTransitionTick = ticks;
                 if (old != null)
                 {
                     GameObject.Destroy(old);
