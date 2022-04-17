@@ -252,8 +252,9 @@ MonoBehaviour:
   DirtPrefab: {fileID: 7923678715175791287, guid: 6155821cb83e76948959a17f70889c49, type: 3}
   GrassPrefab: {fileID: 7923678715175791287, guid: 6735e0122a5ba8c45861917407a39faa, type: 3}
   TomatoSeedPrefab: {fileID: 919132149155446097, guid: fd77b1316ad461c468aac46b9286c677, type: 3}
-  TomatoPlantPrefab: {fileID: 919132149155446097, guid: 3b1edb39464a68d45bd13ccbe136b618, type: 3}
-  TomatoRipePlantPrefab: {fileID: 919132149155446097, guid: 9b6a6633e14a74046b62ac3a487273bb, type: 3}
+  TomatoSproutPrefab: {fileID: 919132149155446097, guid: 3b1edb39464a68d45bd13ccbe136b618, type: 3}
+  TomatoPlantPrefab: {fileID: 919132149155446097, guid: 9b6a6633e14a74046b62ac3a487273bb, type: 3}
+  TomatoPlantWithTomatoesPrefab: {fileID: 919132149155446097, guid: a9ab0fcdb80411b46b448437e5ac069d, type: 3}
   Cursor: {fileID: 1565647190}
 --- !u!4 &158463842
 Transform:

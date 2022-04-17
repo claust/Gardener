@@ -14,9 +14,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject TomatoSeedPrefab;
     [SerializeField]
+    GameObject TomatoSproutPrefab;
+    [SerializeField]
     GameObject TomatoPlantPrefab;
     [SerializeField]
-    GameObject TomatoRipePlantPrefab;
+    GameObject TomatoPlantWithTomatoesPrefab;
 
     [SerializeField]
     public GameObject Cursor;
@@ -25,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     Tile[,] _tiles;
 
-    int Ticks = 0;
+    int _ticks = 0;
     float _tileMargin = 0f;
     float _tileWidth = 0;
     float _tileHeight = 0;
@@ -60,15 +62,15 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Ticks += 1;
+        _ticks += 1;
         foreach (Tile t in _tiles)
         {
             if (t.Plant != null)
             {
-                t.Plant.TransitionIfNeeded(Ticks);
+                t.Plant.TransitionIfNeeded(_ticks);
             }
         };
-        if (Ticks % 100 == 0)
+        if (_ticks % 100 == 0)
         {
             // Debug.Log($"Ticks: {Ticks}");
         }
@@ -121,6 +123,12 @@ public class GameManager : MonoBehaviour
             case ToolType.Seeder:
                 PlantSeed(tile);
                 break;
+            case ToolType.Scissors:
+                Harvest(tile);
+                break;
+            default:
+                Debug.Log($"Unknown selected tool: {_selectedTool}");
+                break;
         }
 
     }
@@ -131,12 +139,10 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[tileScript.x, tileScript.z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
-            // var prefabX = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.x;
-            // var prefabZ = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.z;
             var pos = tileScript.gameObject.transform.position;
             Debug.Log($"Planting seed at {pos.x},{pos.z}");
             var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
-            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoPlantPrefab, TomatoRipePlantPrefab }, Ticks);
+            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoSproutPrefab, TomatoPlantPrefab, TomatoPlantWithTomatoesPrefab }, _ticks);
             var seed = tile.Plant.GameObject;
             seed.transform.position = newPos;
         }
@@ -179,9 +185,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("No grass to remove on this tile");
         }
     }
-}
 
-public enum ToolType
-{
-    None, GrassRemover, WateringCan, Seeder
+    private void Harvest(TileScript ts)
+    {
+        Debug.Log("Harvest");
+        var tile = _tiles[ts.x, ts.z];
+        if (tile.Plant != null)
+        {
+            Debug.Log($"Harvesting {tile.Plant.Name}");
+            tile.Plant.Harvest(_ticks);
+        }
+    }
 }

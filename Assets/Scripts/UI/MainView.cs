@@ -45,6 +45,12 @@ namespace Assets.Scripts.UI
                 Debug.Log("Seeder selected");
                 _gameManager.OnToolClicked(ToolType.Seeder);
             };
+            var toolScissors = _uiDocument.rootVisualElement.Q<Button>("ScissorsToolButton");
+            toolScissors.clickable.clicked += () =>
+            {
+                Debug.Log("Scissors selected");
+                _gameManager.OnToolClicked(ToolType.Scissors);
+            };
         }
     }
 }

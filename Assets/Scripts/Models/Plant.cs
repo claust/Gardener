@@ -69,6 +69,13 @@ namespace Assets.Scripts.Models
             }
         }
 
+        public bool Harvest(int ticks)
+        {
+            Stage -= 2;
+            _lastStageTransitionTick = 0;
+            return true;
+        }
+
         public static Plant Tomato(GameObject[] prefabs, int ticks)
         {
             return new Plant("Tomato", "A common red tomato", prefabs, ticks, 200);
