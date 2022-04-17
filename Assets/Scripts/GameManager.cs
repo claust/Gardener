@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     GameObject TomatoSeedPrefab;
     [SerializeField]
     GameObject TomatoPlantPrefab;
+    [SerializeField]
+    GameObject TomatoRipePlantPrefab;
 
     [SerializeField]
     public GameObject Cursor;
@@ -68,7 +70,7 @@ public class GameManager : MonoBehaviour
         };
         if (Ticks % 100 == 0)
         {
-            Debug.Log($"Ticks: {Ticks}");
+            // Debug.Log($"Ticks: {Ticks}");
         }
     }
 
@@ -129,12 +131,12 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[tileScript.x, tileScript.z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
-            var prefabX = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.x;
-            var prefabZ = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.z;
-            Debug.Log($"Planting seed at {_prefabX * tileScript.x},{_prefabZ * tileScript.z}, prefab: x {prefabX}, z {prefabZ}");
+            // var prefabX = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.x;
+            // var prefabZ = TomatoSeedPrefab.GetComponent<Renderer>().bounds.size.z;
             var pos = tileScript.gameObject.transform.position;
-            var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.1f, pos.z);
-            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoPlantPrefab }, Ticks);
+            Debug.Log($"Planting seed at {pos.x},{pos.z}");
+            var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
+            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoPlantPrefab, TomatoRipePlantPrefab }, Ticks);
             var seed = tile.Plant.GameObject;
             seed.transform.position = newPos;
         }
