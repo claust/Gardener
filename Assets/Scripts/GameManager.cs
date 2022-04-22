@@ -192,7 +192,6 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[ts.x, ts.z];
         if (tile.Plant != null)
         {
-            Debug.Log($"Harvesting {tile.Plant.Name}");
             tile.Plant.Harvest(_ticks);
         }
     }

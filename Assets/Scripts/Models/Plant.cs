@@ -71,9 +71,15 @@ namespace Assets.Scripts.Models
 
         public bool Harvest(int ticks)
         {
-            Stage -= 2;
-            _lastStageTransitionTick = 0;
-            return true;
+            if (Stage == Stages - 1)
+            {
+                Debug.Log($"Harvesting {Name}");
+                Stage -= 2;
+                _lastStageTransitionTick = 0;
+                return true;
+            }
+            Debug.Log($"Nothing to harvest on {Name}");
+            return false;
         }
 
         public static Plant Tomato(GameObject[] prefabs, int ticks)
