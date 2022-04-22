@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject Cursor;
 
+    public Func<bool> IsMouseOverHUD;
+
     ToolType _selectedTool = ToolType.GrassRemover;
 
     Tile[,] _tiles;
@@ -70,10 +72,6 @@ public class GameManager : MonoBehaviour
                 t.Plant.TransitionIfNeeded(_ticks);
             }
         };
-        if (_ticks % 100 == 0)
-        {
-            // Debug.Log($"Ticks: {Ticks}");
-        }
     }
 
     private void CreateTiles()
@@ -108,29 +106,31 @@ public class GameManager : MonoBehaviour
 
     public void OnTileClicked(TileScript tile)
     {
-        Debug.Log("OnTileClicked");
-        switch (_selectedTool)
+        if (!IsMouseOverHUD())
         {
-            case ToolType.None:
-                Debug.Log("No tool selected");
-                break;
-            case ToolType.GrassRemover:
-                RemoveGrass(tile);
-                break;
-            case ToolType.WateringCan:
-                Water(tile);
-                break;
-            case ToolType.Seeder:
-                PlantSeed(tile);
-                break;
-            case ToolType.Scissors:
-                Harvest(tile);
-                break;
-            default:
-                Debug.Log($"Unknown selected tool: {_selectedTool}");
-                break;
+            Debug.Log("OnTileClicked");
+            switch (_selectedTool)
+            {
+                case ToolType.None:
+                    Debug.Log("No tool selected");
+                    break;
+                case ToolType.GrassRemover:
+                    RemoveGrass(tile);
+                    break;
+                case ToolType.WateringCan:
+                    Water(tile);
+                    break;
+                case ToolType.Seeder:
+                    PlantSeed(tile);
+                    break;
+                case ToolType.Scissors:
+                    Harvest(tile);
+                    break;
+                default:
+                    Debug.Log($"Unknown selected tool: {_selectedTool}");
+                    break;
+            }
         }
-
     }
 
     private void PlantSeed(TileScript tileScript)

@@ -19,6 +19,7 @@ public class TileScript : MonoBehaviour
     {
         OriginalColor = GetComponent<Renderer>().material.color;
     }
+
     public void Update()
     {
         if (Tile != null)

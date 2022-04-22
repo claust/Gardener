@@ -22,6 +22,7 @@ namespace Assets.Scripts.UI
             // toolController.InitializeToolList(uiDocument.rootVisualElement, template);
             var gameManagerObject = GameObject.FindGameObjectWithTag("GameController");
             _gameManager = gameManagerObject.GetComponent<GameManager>();
+            _gameManager.IsMouseOverHUD = IsMouseOverMe;
             SetupTools();
         }
 
@@ -51,6 +52,15 @@ namespace Assets.Scripts.UI
                 Debug.Log("Scissors selected");
                 _gameManager.OnToolClicked(ToolType.Scissors);
             };
+        }
+
+        public bool IsMouseOverMe()
+        {
+            var position = Input.mousePosition;
+            Vector2 pointerUiPos = new Vector2 { x = position.x, y = Screen.height - position.y };
+            var picked = new List<VisualElement>();
+            _uiDocument.rootVisualElement.panel.PickAll(pointerUiPos, picked);
+            return picked.Any(ve => ve.enabledInHierarchy && ve.resolvedStyle.backgroundColor.a != 0);
         }
     }
 }
