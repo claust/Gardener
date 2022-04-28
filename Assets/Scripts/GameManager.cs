@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
                 tileScript.x = x;
                 tileScript.z = z;
                 _tiles[x, z] = new Tile(TileType.Grass);
-                tileScript.Tile = _tiles[x, z];
+                tileScript.SetTile(_tiles[x, z]);
             }
         }
     }

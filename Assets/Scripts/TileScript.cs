@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class TileScript : MonoBehaviour
 {
-    public GameObject Cursor;
-    public GameManager GameManager;
+    [SerializeField]
+    private Color ColorFrom;
+    [SerializeField]
+    private Color ColorTo;
+    public GameObject Cursor { get; set; }
+    public GameManager GameManager { get; set; }
     public Tile Tile { get; set; }
 
-    public int x;
-    public int z;
+    public int x { get; set; }
+    public int z { get; set; }
 
     Color OriginalColor { get; set; }
     bool _tileClickedAtLeastOnce = false;
@@ -18,6 +22,7 @@ public class TileScript : MonoBehaviour
     public void OnEnable()
     {
         OriginalColor = GetComponent<Renderer>().material.color;
+        
     }
 
     public void Update()
@@ -40,6 +45,15 @@ public class TileScript : MonoBehaviour
         }
     }
 
+    public void SetTile(Tile tile)
+    {
+        Tile = tile;
+        if (Tile.Type == TileType.Grass)
+        {
+            GetComponent<Renderer>().material.color = Color.Lerp(ColorFrom, ColorTo, Random.value);
+        }
+    }
+
     public GameObject CloneAsType(GameObject tilePrefab, Tile tile)
     {
         var newTile = Instantiate(tilePrefab, transform.position, Quaternion.identity);
@@ -49,7 +63,7 @@ public class TileScript : MonoBehaviour
         tileScript.GameManager = GameManager;
         tileScript.x = x;
         tileScript.z = z;
-        tileScript.Tile = tile;
+        tileScript.SetTile(tile);
         return newTile;
     }
 
