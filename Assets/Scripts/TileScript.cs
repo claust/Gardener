@@ -43,7 +43,7 @@ public class TileScript : MonoBehaviour
     public GameObject CloneAsType(GameObject tilePrefab, Tile tile)
     {
         var newTile = Instantiate(tilePrefab, transform.position, Quaternion.identity);
-        newTile.transform.position = newTile.transform.position + Vector3.up * 0.01f;
+        newTile.transform.position = newTile.transform.position - Vector3.up * 0.05f;
         var tileScript = newTile.GetComponent<TileScript>();
         tileScript.Cursor = Cursor;
         tileScript.GameManager = GameManager;
