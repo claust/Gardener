@@ -11,19 +11,14 @@ public class TileScript : MonoBehaviour
     private Color ColorTo;
     public GameObject Cursor { get; set; }
     public GameManager GameManager { get; set; }
-    public Tile Tile { get; set; }
+    public Tile Tile { get; private set; }
+
+    private Color _colorOriginal;
 
     public int x { get; set; }
     public int z { get; set; }
 
-    Color OriginalColor { get; set; }
     bool _tileClickedAtLeastOnce = false;
-
-    public void OnEnable()
-    {
-        OriginalColor = GetComponent<Renderer>().material.color;
-        
-    }
 
     public void Update()
     {
@@ -31,27 +26,21 @@ public class TileScript : MonoBehaviour
         {
             if (Tile.Type == TileType.Dirt)
             {
-                var color = Color.white;
-                color.r = Tile.Dryness * OriginalColor.r;
-                color.g = Tile.Dryness * OriginalColor.g;
-                color.b = Tile.Dryness * OriginalColor.b;
-                GetComponent<Renderer>().material.color = color;
+                GetComponent<Renderer>().material.color = Color.Lerp(Color.black, _colorOriginal, Tile.Dryness);
                 Tile.WaterLevel = 0.999f * Tile.WaterLevel;
             }
         }
         else
         {
-            Debug.Log("No tile?");
+            Debug.Log($"No tile at {x},{z}?");
         }
     }
 
     public void SetTile(Tile tile)
     {
         Tile = tile;
-        if (Tile.Type == TileType.Grass)
-        {
-            GetComponent<Renderer>().material.color = Color.Lerp(ColorFrom, ColorTo, Random.value);
-        }
+        _colorOriginal = Color.Lerp(ColorFrom, ColorTo, Random.value);
+        GetComponent<Renderer>().material.color = _colorOriginal;
     }
 
     public GameObject CloneAsType(GameObject tilePrefab, Tile tile)
