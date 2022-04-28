@@ -14,6 +14,12 @@ namespace Assets.Scripts.UI
         private VisualTreeAsset template;
         private UIDocument _uiDocument;
         private GameManager _gameManager;
+        private Label _coins;
+
+        public void SetCoins(int coins)
+        {
+            _coins.text = coins.ToString();
+        }
 
         private void OnEnable()
         {
@@ -24,6 +30,12 @@ namespace Assets.Scripts.UI
             _gameManager = gameManagerObject.GetComponent<GameManager>();
             _gameManager.IsMouseOverHUD = IsMouseOverMe;
             SetupTools();
+            SetupDatabinding();
+        }
+
+        private void SetupDatabinding()
+        {
+            _coins = _uiDocument.rootVisualElement.Q<Label>("Coins");
         }
 
         private void SetupTools()

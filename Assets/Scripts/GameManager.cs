@@ -1,4 +1,5 @@
 using Assets.Scripts.Models;
+using Assets.Scripts.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    GameObject UI;
     [SerializeField]
     GameObject DirtPrefab;
     [SerializeField]
@@ -24,6 +27,9 @@ public class GameManager : MonoBehaviour
     public GameObject Cursor;
 
     public Func<bool> IsMouseOverHUD;
+
+    [SerializeField]
+    int Coins = 100;
 
     ToolType _selectedTool = ToolType.GrassRemover;
 
@@ -192,7 +198,11 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[ts.x, ts.z];
         if (tile.Plant != null)
         {
-            tile.Plant.Harvest(_ticks);
+            if (tile.Plant.Harvest(_ticks))
+            {
+                Coins += 1;
+                UI.GetComponent<MainView>().SetCoins(Coins);
+            };
         }
     }
 }
