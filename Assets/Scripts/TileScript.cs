@@ -43,9 +43,10 @@ public class TileScript : MonoBehaviour
         GetComponent<Renderer>().material.color = _colorOriginal;
     }
 
-    public GameObject CloneAsType(GameObject tilePrefab, Tile tile)
+    public GameObject CloneAsType(GameObject tilePrefab, Tile tile, Transform parent)
     {
         var newTile = Instantiate(tilePrefab, transform.position, Quaternion.identity);
+        newTile.transform.parent = parent;
         newTile.transform.position = newTile.transform.position - Vector3.up * 0.05f;
         var tileScript = newTile.GetComponent<TileScript>();
         tileScript.Cursor = Cursor;

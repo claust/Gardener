@@ -3,11 +3,14 @@ using Assets.Scripts.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    GameObject _container;
     [SerializeField]
     GameObject UI;
     [SerializeField]
@@ -80,7 +83,7 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    private void CreateTiles()
+    public void CreateTiles()
     {
         _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
         // var parent = GameObject.FindGameObjectWithTag("tiles");
@@ -93,6 +96,7 @@ public class GameManager : MonoBehaviour
                 // Why does adding the tiles to a parent make them fall?
                 // Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity, parent.transform);
                 var tile = Instantiate(GrassPrefab, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
+                tile.transform.parent = _container.transform;
                 var tileScript = tile.GetComponent<TileScript>();
                 tileScript.Cursor = Cursor;
                 tileScript.GameManager = this;
@@ -183,7 +187,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Removing grass");
             _tiles[ts.x, ts.z] = new Tile(TileType.Dirt);
-            var newTile = ts.CloneAsType(DirtPrefab, _tiles[ts.x, ts.z]);
+            var newTile = ts.CloneAsType(DirtPrefab, _tiles[ts.x, ts.z], _container.transform);
             Destroy(ts.gameObject);
         }
         else
