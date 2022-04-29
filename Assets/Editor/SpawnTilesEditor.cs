@@ -23,6 +23,5 @@ public class SpawnTilesEditor : EditorWindow
         {
             FindObjectOfType<GameManager>().RemoveEditorTiles();
         }
-
     }
 }
