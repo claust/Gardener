@@ -21,10 +21,17 @@ public class SpawnTilesEditor : EditorWindow
         }
         if (GUILayout.Button("Remove all"))
         {
-            foreach(Transform child in FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform)
+            var parent = FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform;
+            var list = new List<GameObject>();
+            foreach (Transform child in parent)
             {
-                Destroy(child.gameObject);
+                list.Add(child.gameObject);
             }
+            foreach (GameObject child in list)
+            {
+                DestroyImmediate(child);
+            }
+
         }
 
     }
