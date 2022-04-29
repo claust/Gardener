@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        RemoveEditorTiles();
         CreateTiles();
     }
 
@@ -105,6 +106,20 @@ public class GameManager : MonoBehaviour
                 _tiles[x, z] = new Tile(TileType.Grass);
                 tileScript.SetTile(_tiles[x, z]);
             }
+        }
+    }
+
+    public void RemoveEditorTiles()
+    {
+        var parent = FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform;
+        var list = new List<GameObject>();
+        foreach (Transform child in parent)
+        {
+            list.Add(child.gameObject);
+        }
+        foreach (GameObject child in list)
+        {
+            DestroyImmediate(child);
         }
     }
 

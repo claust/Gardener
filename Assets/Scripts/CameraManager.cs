@@ -12,7 +12,7 @@ public class CameraManager : MonoBehaviour
     Vector2 XRange = new Vector2(- 10, Globals.WorldSize + 10);
     [SerializeField]
     Vector2 ZRange = new Vector2(- 10, Globals.WorldSize);
-
+    [SerializeField]
     float _zoom = 8;
 
     // Start is called before the first frame update
