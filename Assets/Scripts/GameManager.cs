@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
     public Func<bool> IsMouseOverHUD;
 
     [SerializeField]
-    int Coins = 100;
+    public int Coins = 100;
+    public Inventory Inventory = new();
 
     ToolType _selectedTool = ToolType.GrassRemover;
 
@@ -117,8 +118,9 @@ public class GameManager : MonoBehaviour
         {
             list.Add(child.gameObject);
         }
-        foreach (GameObject child in list)
+        for (int i = 0; i < list.Count; i++)
         {
+            GameObject child = list[i];
             DestroyImmediate(child);
         }
     }
@@ -215,11 +217,13 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Harvest");
         var tile = _tiles[ts.x, ts.z];
-        if (tile.Plant != null)
+        var plant = tile.Plant;
+        if (plant != null && Inventory.HasRoomFor(plant.HarvestableType))
         {
             if (tile.Plant.Harvest(_ticks))
             {
                 Coins += 1;
+                Inventory.Add(plant.ToInventoryItem());
                 UI.GetComponent<MainView>().SetCoins(Coins);
             };
         }

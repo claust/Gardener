@@ -11,6 +11,7 @@ namespace Assets.Scripts.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public InventoryItemType HarvestableType { get; set; }
         private int _ticksPerTransition { get; set; }
         public int Stage { get; private set; }
         private GameObject _gameObject;
@@ -40,15 +41,17 @@ namespace Assets.Scripts.Models
             }
         }
 
-        public Plant(string name, string description, GameObject[] stages, int createdAtTick, int ticksPerTransition)
+        public Plant(string name, string description, InventoryItemType harvestableType, GameObject[] stages, int createdAtTick, int ticksPerTransition)
         {
             Name = name;
             Description = description;
+            HarvestableType = harvestableType;
             _stages = stages;
             Stage = 0;
             _ticksPerTransition = ticksPerTransition;
             _lastStageTransitionTick = createdAtTick;
         }
+
         public bool TransitionIfNeeded(int ticks)
         {
             if (Stage + 1 < Stages && _lastStageTransitionTick + _ticksPerTransition < ticks)
@@ -69,6 +72,11 @@ namespace Assets.Scripts.Models
             }
         }
 
+        public bool IsHarvestable()
+        {
+            return Stage == Stages - 1;
+        }
+
         public bool Harvest(int ticks)
         {
             if (Stage == Stages - 1)
@@ -82,9 +90,21 @@ namespace Assets.Scripts.Models
             return false;
         }
 
+        public InventoryItem ToInventoryItem()
+        {
+            var item = new InventoryItem()
+            {
+                Name = Name,
+                Description = Description,
+                Type = HarvestableType,
+                Quantity = 1,
+            };
+            return item;
+        }
+
         public static Plant Tomato(GameObject[] prefabs, int ticks)
         {
-            return new Plant("Tomato", "A common red tomato", prefabs, ticks, 200);
+            return new Plant("Tomato", "A common red tomato", InventoryItemType.Tomato, prefabs, ticks, 200);
         }
     }
 }

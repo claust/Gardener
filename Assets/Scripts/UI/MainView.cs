@@ -10,11 +10,12 @@ namespace Assets.Scripts.UI
 {
     public class MainView : MonoBehaviour
     {
-        [SerializeField]
-        private VisualTreeAsset template;
+        // [SerializeField]
+        // private VisualTreeAsset template;
         private UIDocument _uiDocument;
         private GameManager _gameManager;
         private Label _coins;
+        private VisualElement _inventory;
 
         public void SetCoins(int coins)
         {
@@ -36,6 +37,19 @@ namespace Assets.Scripts.UI
         private void SetupDatabinding()
         {
             _coins = _uiDocument.rootVisualElement.Q<Label>("Coins");
+            _inventory = _uiDocument.rootVisualElement.Q<VisualElement>("Inventory");
+            _inventory.visible = false;
+        }
+
+        private void Bind(Inventory inventory)
+        {
+            for (int i = 0; i < inventory.List.Count; i++)
+            {
+                var item = inventory.List[i];
+                int row = i % 3 + 1;
+                _inventory.Q<VisualElement>($"Row{row}").Q<Label>("ItemName").text = item.Name;
+                _inventory.Q<VisualElement>($"Row{row}").Q<Label>("Quantity").text = item.Quantity.ToString();
+            }
         }
 
         private void SetupTools()
@@ -63,6 +77,16 @@ namespace Assets.Scripts.UI
             {
                 Debug.Log("Scissors selected");
                 _gameManager.OnToolClicked(ToolType.Scissors);
+            };
+        }
+
+        void Update()
+        {
+            if(Input.GetKeyUp(KeyCode.Tab))
+            {
+                Debug.Log($"Tab pressed: Inventory {_inventory.resolvedStyle.display}");
+                _inventory.visible = !_inventory.visible;
+                Bind(_gameManager.Inventory);
             };
         }
 
