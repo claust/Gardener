@@ -28,6 +28,14 @@ namespace Assets.Scripts.Models
             get { return _stages?.Length ?? 0; }
         }
         private int _lastStageTransitionTick { get; set; }
+
+        private Transform _parent
+        {
+            get
+            {
+                return GameObject.FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform;
+            }
+        }
         public GameObject GameObject
         {
             get
@@ -36,6 +44,7 @@ namespace Assets.Scripts.Models
                 {
                     var rnd = new System.Random();
                     _gameObject = GameObject.Instantiate(CurrentStagePrefab, Vector3.zero, Quaternion.AngleAxis(rnd.Next(360), Vector3.up));
+                    _gameObject.transform.parent = _parent;
                 }
                 return _gameObject;
             }
@@ -59,6 +68,7 @@ namespace Assets.Scripts.Models
                 Stage += 1;
                 var old = _gameObject;
                 _gameObject = GameObject.Instantiate(CurrentStagePrefab, old?.transform.position ?? Vector3.zero, old?.transform.rotation ?? Quaternion.identity);
+                _gameObject.transform.parent = _parent;
                 _lastStageTransitionTick = ticks;
                 if (old != null)
                 {
