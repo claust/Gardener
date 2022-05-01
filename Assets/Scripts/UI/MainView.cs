@@ -46,9 +46,10 @@ namespace Assets.Scripts.UI
             for (int i = 0; i < inventory.List.Count; i++)
             {
                 var item = inventory.List[i];
-                int row = i % 3 + 1;
-                _inventory.Q<VisualElement>($"Row{row}").Q<Label>("ItemName").text = item.Name;
-                _inventory.Q<VisualElement>($"Row{row}").Q<Label>("Quantity").text = item.Quantity.ToString();
+                var element = _inventory.Q<VisualElement>($"InventoryItem{i}");
+                element.Q<Label>("ItemName").text = item.Name;
+                element.Q<VisualElement>("ItemIcon").style.backgroundImage = new StyleBackground(item.Icon);
+                element.Q<Label>("Quantity").text = item.Quantity.ToString();
             }
         }
 

@@ -9,13 +9,14 @@ namespace Assets.Scripts.Models
 {
     public class Plant
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public InventoryItemType HarvestableType { get; set; }
-        private int _ticksPerTransition { get; set; }
+        private PlantData _plantData;
+        public string Name { get { return _plantData.Name; } }
+        public string Description { get { return _plantData.Description; } }
+        public InventoryItemType HarvestableType { get { return _plantData.HarvestableType; } }
+        private int _ticksPerTransition { get { return _plantData.ticksPerTransition; } }
         public int Stage { get; private set; }
         private GameObject _gameObject;
-        private GameObject[] _stages;
+        private GameObject[] _stages { get { return _plantData.StagePrefabs.ToArray(); } }
         private GameObject CurrentStagePrefab
         {
             get
@@ -50,14 +51,10 @@ namespace Assets.Scripts.Models
             }
         }
 
-        public Plant(string name, string description, InventoryItemType harvestableType, GameObject[] stages, int createdAtTick, int ticksPerTransition)
+        public Plant(PlantData plantData, int createdAtTick)
         {
-            Name = name;
-            Description = description;
-            HarvestableType = harvestableType;
-            _stages = stages;
+            _plantData = plantData;
             Stage = 0;
-            _ticksPerTransition = ticksPerTransition;
             _lastStageTransitionTick = createdAtTick;
         }
 
@@ -106,15 +103,11 @@ namespace Assets.Scripts.Models
             {
                 Name = Name,
                 Description = Description,
+                Icon = _plantData.Icon,
                 Type = HarvestableType,
                 Quantity = 1,
             };
             return item;
-        }
-
-        public static Plant Tomato(GameObject[] prefabs, int ticks)
-        {
-            return new Plant("Tomato", "A common red tomato", InventoryItemType.Tomato, prefabs, ticks, 200);
         }
     }
 }

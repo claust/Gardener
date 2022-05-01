@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     public Inventory Inventory = new();
 
     ToolType _selectedTool = ToolType.GrassRemover;
-
+    List<PlantData> _plants = new List<PlantData>();
     Tile[,] _tiles;
 
     int _ticks = 0;
@@ -71,6 +71,12 @@ public class GameManager : MonoBehaviour
     {
         RemoveEditorTiles();
         CreateTiles();
+        InitializePlants();
+    }
+
+    private void InitializePlants()
+    {
+        _plants.AddRange(Resources.LoadAll<PlantData>("Plants"));
     }
 
     private void FixedUpdate()
@@ -169,7 +175,8 @@ public class GameManager : MonoBehaviour
             var pos = tileScript.gameObject.transform.position;
             Debug.Log($"Planting seed at {pos.x},{pos.z}");
             var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
-            tile.Plant = Plant.Tomato(new GameObject[] { TomatoSeedPrefab, TomatoSproutPrefab, TomatoPlantPrefab, TomatoPlantWithTomatoesPrefab }, _ticks);
+            tile.Plant = new Plant(_plants[UnityEngine.Random.Range(0, _plants.Count)], _ticks);
+            Debug.Log($"Planted {tile.Plant.Name}");
             var seed = tile.Plant.GameObject;
             seed.transform.position = newPos;
         }

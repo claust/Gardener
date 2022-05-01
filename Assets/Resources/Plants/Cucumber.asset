@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0046b626fc15c6a428e787afa76fc39d, type: 3}
+  m_Name: Cucumber
+  m_EditorClassIdentifier: 
+  Name: Cucumber
+  Description: Long, green, crisp
+  Icon: {fileID: 21300000, guid: 372781d5837dea348be1ce18627539d9, type: 3}
+  ticksPerTransition: 50
+  StagePrefabs:
+  - {fileID: 919132149155446097, guid: fd77b1316ad461c468aac46b9286c677, type: 3}
+  - {fileID: 919132149155446097, guid: 3b1edb39464a68d45bd13ccbe136b618, type: 3}
+  - {fileID: 919132149155446097, guid: 9b6a6633e14a74046b62ac3a487273bb, type: 3}
+  HarvestableType: 1
