@@ -19,15 +19,17 @@ public class TileScript : MonoBehaviour
     public int z { get; set; }
 
     bool _tileClickedAtLeastOnce = false;
+    static readonly int WaterLevel = Shader.PropertyToID("_WaterLevel");
 
     public void Update()
     {
         if (Tile != null)
         {
-            if (Tile.Type == TileType.Dirt)
+            if (Tile.Type == TileType.Dirt && Tile.WaterLevel > 0.01)
             {
-                GetComponent<Renderer>().material.color = Color.Lerp(Color.black, _colorOriginal, Tile.Dryness);
-                Tile.WaterLevel = 0.999f * Tile.WaterLevel;
+                // GetComponent<Renderer>().material.color = Color.Lerp(Color.black, _colorOriginal, Tile.Dryness);
+                GetComponent<Renderer>().sharedMaterial.SetFloat(WaterLevel, Tile.WaterLevel);
+                Tile.WaterLevel = 0.9992f * Tile.WaterLevel;
             }
         }
         else
