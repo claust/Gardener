@@ -11,4 +11,5 @@ public class PlantData : ScriptableObject
     public int ticksPerTransition = 200;
     public List<GameObject> StagePrefabs;
     public InventoryItemType HarvestableType;
+    public int HarvestableQuantity;
 }

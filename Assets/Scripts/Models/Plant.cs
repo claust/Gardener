@@ -13,6 +13,7 @@ namespace Assets.Scripts.Models
         public string Name { get { return _plantData.Name; } }
         public string Description { get { return _plantData.Description; } }
         public InventoryItemType HarvestableType { get { return _plantData.HarvestableType; } }
+        public int HarvestableQuantity { get { return _plantData.HarvestableQuantity; } }
         private int _ticksPerTransition { get { return _plantData.ticksPerTransition; } }
         public int Stage { get; private set; }
         private GameObject _gameObject;

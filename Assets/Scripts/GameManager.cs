@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour
                 Coins += 1;
                 var harvested = new InventoryItem(_inventoryItems.First(i => i.Type == plant.HarvestableType))
                 {
-                    Quantity = 1
+                    Quantity = plant.HarvestableQuantity
                 };
                 Inventory.Add(harvested);
                 UI.GetComponent<MainView>().SetCoins(Coins);
