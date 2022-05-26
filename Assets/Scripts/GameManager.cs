@@ -36,15 +36,15 @@ public class GameManager : MonoBehaviour
     public Inventory Inventory = new();
 
     ToolType _selectedTool = ToolType.GrassRemover;
-    List<PlantData> _plants = new List<PlantData>();
-    List<InventoryItemData> _inventoryItems = new List<InventoryItemData>();
+    readonly List<PlantData> _plants = new();
+    readonly List<InventoryItemData> _inventoryItems = new();
     Tile[,] _tiles;
 
     int _ticks = 0;
-    float _tileMargin = 0f;
+    readonly float _tileMargin = 0f;
     float _tileWidth = 0;
     float _tileHeight = 0;
-    float _prefabX
+    float PrefabX
     {
         get
         {
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
             return _tileWidth;
         }
     }
-    float _prefabZ
+    float PrefabZ
     {
         get
         {
@@ -103,8 +103,8 @@ public class GameManager : MonoBehaviour
     {
         _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
         // var parent = GameObject.FindGameObjectWithTag("tiles");
-        var px = _prefabX * (1 + _tileMargin);
-        var pz = _prefabZ * (1 + _tileMargin);
+        var px = PrefabX * (1 + _tileMargin);
+        var pz = PrefabZ * (1 + _tileMargin);
         for (int x = 0; x < Globals.WorldSize; x++)
         {
             for (int z = 0; z < Globals.WorldSize; z++)
@@ -116,8 +116,8 @@ public class GameManager : MonoBehaviour
                 var tileScript = tile.GetComponent<TileScript>();
                 tileScript.Cursor = Cursor;
                 tileScript.GameManager = this;
-                tileScript.x = x;
-                tileScript.z = z;
+                tileScript.X = x;
+                tileScript.Z = z;
                 _tiles[x, z] = new Tile(TileType.Grass);
                 tileScript.SetTile(_tiles[x, z]);
             }
@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
     private void PlantSeed(TileScript tileScript)
     {
         Debug.Log("Plant seed");
-        var tile = _tiles[tileScript.x, tileScript.z];
+        var tile = _tiles[tileScript.X, tileScript.Z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
             var plantData = _plants[UnityEngine.Random.Range(0, _plants.Count)];
@@ -237,11 +237,11 @@ public class GameManager : MonoBehaviour
     void RemoveGrass(TileScript ts)
     {
         Debug.Log("RemoveGrass");
-        if (_tiles[ts.x, ts.z].Type == TileType.Grass)
+        if (_tiles[ts.X, ts.Z].Type == TileType.Grass)
         {
             Debug.Log("Removing grass");
-            _tiles[ts.x, ts.z] = new Tile(TileType.Dirt);
-            var newTile = ts.CloneAsType(DirtPrefab, _tiles[ts.x, ts.z], _container.transform);
+            _tiles[ts.X, ts.Z] = new Tile(TileType.Dirt);
+            ts.CloneAsType(DirtPrefab, _tiles[ts.X, ts.Z], _container.transform);
             Destroy(ts.gameObject);
         }
         else
@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
     private void Harvest(TileScript ts)
     {
         Debug.Log("Harvest");
-        var tile = _tiles[ts.x, ts.z];
+        var tile = _tiles[ts.X, ts.Z];
         var plant = tile.Plant;
         if (plant != null && Inventory.HasRoomFor(plant.HarvestableType))
         {

@@ -15,8 +15,8 @@ public class TileScript : MonoBehaviour
 
     private Color _colorOriginal;
 
-    public int x { get; set; }
-    public int z { get; set; }
+    public int X { get; set; }
+    public int Z { get; set; }
 
     bool _tileClickedAtLeastOnce = false;
     static readonly int WaterLevel = Shader.PropertyToID("_WaterLevel");
@@ -34,7 +34,7 @@ public class TileScript : MonoBehaviour
         }
         else
         {
-            Debug.Log($"No tile at {x},{z}?");
+            Debug.Log($"No tile at {X},{Z}?");
         }
     }
 
@@ -53,8 +53,8 @@ public class TileScript : MonoBehaviour
         var tileScript = newTile.GetComponent<TileScript>();
         tileScript.Cursor = Cursor;
         tileScript.GameManager = GameManager;
-        tileScript.x = x;
-        tileScript.z = z;
+        tileScript.X = X;
+        tileScript.Z = Z;
         tileScript.SetTile(tile);
         return newTile;
     }
