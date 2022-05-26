@@ -75,7 +75,6 @@ public class GameManager : MonoBehaviour
         RemoveEditorTiles();
         LoadWorld();
         CreateTiles();
-        BuySeeds();
     }
 
     void OnApplicationQuit()
@@ -98,6 +97,7 @@ public class GameManager : MonoBehaviour
             }
             Coins = 100;
             Inventory = new();
+            BuySeeds();
         }
         else
         {
@@ -172,6 +172,13 @@ public class GameManager : MonoBehaviour
                 tileScript.X = x;
                 tileScript.Z = z;
                 tileScript.SetTile(tile);
+                if (tile.Plant != null)
+                {
+                    var pos = tileScript.transform.position;
+                    var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
+                    var seed = tile.Plant.GameObject;
+                    seed.transform.position = newPos;
+                }
             }
         }
     }
