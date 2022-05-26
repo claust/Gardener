@@ -28,7 +28,6 @@ public static class SavedGameUtility
                 Debug.LogError(ex.Message);
                 return null;
             }
-
         }
         return null;
     }

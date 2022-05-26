@@ -83,7 +83,7 @@ namespace Assets.Scripts.UI
 
         void Update()
         {
-            if(Input.GetKeyUp(KeyCode.Tab))
+            if (Input.GetKeyUp(KeyCode.Tab))
             {
                 Debug.Log($"Tab pressed: Inventory {_inventory.resolvedStyle.display}");
                 _inventory.visible = !_inventory.visible;
