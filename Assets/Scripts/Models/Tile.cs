@@ -26,6 +26,7 @@ namespace Assets.Scripts.Models
             WaterLevel = 1;
         }
     }
+
     public enum TileType
     {
         Dirt,

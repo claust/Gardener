@@ -14,6 +14,7 @@ public class Inventory
     }
 
     private int _maxSlots = 6;
+
     public int MaxSlots
     {
         get

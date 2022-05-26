@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public int Coins = 100;
     public Inventory Inventory = new();
+    private World World = new();
+
 
     ToolType _selectedTool = ToolType.GrassRemover;
     readonly List<PlantData> _plants = new();
@@ -71,11 +73,51 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         RemoveEditorTiles();
+        LoadWorld();
         CreateTiles();
         InitializePlants();
         InitializeInventoryItems();
         BuySeeds();
     }
+
+    void OnApplicationQuit()
+    {
+        SaveWorld();
+    }
+
+    private void LoadWorld()
+    {
+        World = SavedGameUtility.LoadWorld();
+        if (World == null)
+        {
+            _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
+            for (int x = 0; x < Globals.WorldSize; x++)
+            {
+                for (int z = 0; z < Globals.WorldSize; z++)
+                {
+                    _tiles[x, z] = new Tile(TileType.Grass);
+                }
+            }
+            Coins = 100;
+        }
+        else
+        {
+            _tiles = World.Tiles;
+            Coins = World.Coins;
+        }
+    }
+
+    private void SaveWorld()
+    {
+        World = new()
+        {
+            Tiles = _tiles,
+            Coins = Coins,
+            Inventory = Inventory
+        };
+        SavedGameUtility.SaveWorld(World);
+    }
+
 
     private void InitializePlants()
     {
@@ -101,25 +143,32 @@ public class GameManager : MonoBehaviour
 
     public void CreateTiles()
     {
-        _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
-        // var parent = GameObject.FindGameObjectWithTag("tiles");
         var px = PrefabX * (1 + _tileMargin);
         var pz = PrefabZ * (1 + _tileMargin);
         for (int x = 0; x < Globals.WorldSize; x++)
         {
             for (int z = 0; z < Globals.WorldSize; z++)
             {
-                // Why does adding the tiles to a parent make them fall?
-                // Instantiate(_tilePrefab, new Vector3(px * x, 1, pz * z), Quaternion.identity, parent.transform);
-                var tile = Instantiate(GrassPrefab, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
-                tile.transform.parent = _container.transform;
-                var tileScript = tile.GetComponent<TileScript>();
+                var tile = _tiles[x, z];
+                GameObject prefab;
+                switch (tile.Type)
+                {
+                    case TileType.Dirt:
+                        prefab = DirtPrefab;
+                        break;
+                    default:
+                    case TileType.Grass:
+                        prefab = GrassPrefab;
+                        break;
+                }
+                var tileGO = Instantiate(prefab, new Vector3(px * x, -0.5f, pz * z), Quaternion.identity);
+                tileGO.transform.parent = _container.transform;
+                var tileScript = tileGO.GetComponent<TileScript>();
                 tileScript.Cursor = Cursor;
                 tileScript.GameManager = this;
                 tileScript.X = x;
                 tileScript.Z = z;
-                _tiles[x, z] = new Tile(TileType.Grass);
-                tileScript.SetTile(_tiles[x, z]);
+                tileScript.SetTile(tile);
             }
         }
     }

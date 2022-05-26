@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,7 @@ namespace Assets.Scripts.Models
                 return GameObject.FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform;
             }
         }
+        [JsonIgnore]
         public GameObject GameObject
         {
             get

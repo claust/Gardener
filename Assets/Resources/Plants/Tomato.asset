@@ -22,3 +22,4 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 9b6a6633e14a74046b62ac3a487273bb, type: 3}
   - {fileID: 919132149155446097, guid: a9ab0fcdb80411b46b448437e5ac069d, type: 3}
   HarvestableType: 0
+  HarvestableQuantity: 4
