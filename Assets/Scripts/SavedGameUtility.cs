@@ -11,7 +11,7 @@ public static class SavedGameUtility
     {
         var json = JsonConvert.SerializeObject(world);
         File.WriteAllText(Filename, json);
-        Debug.Log($"Saved world to {Filename}: {json}");
+        Debug.Log($"Saved world to {Filename}");
     }
 
     public static World? LoadWorld()
