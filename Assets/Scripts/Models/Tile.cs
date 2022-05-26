@@ -25,6 +25,25 @@ namespace Assets.Scripts.Models
         {
             WaterLevel = 1;
         }
+
+        public TileSaved ToSaved()
+        {
+            return new TileSaved()
+            {
+                Type = Type,
+                WaterLevel = WaterLevel,
+                Plant = Plant?.ToSaved(),
+            };
+        }
+
+        public static Tile FromSaved(TileSaved saved)
+        {
+            return new Tile(saved.Type)
+            {
+                Plant = saved.Plant == null ? null : Plant.FromSaved(saved.Plant),
+                WaterLevel = saved.WaterLevel,
+            };
+        }
     }
 
     public enum TileType

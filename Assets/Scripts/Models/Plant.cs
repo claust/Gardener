@@ -39,7 +39,7 @@ namespace Assets.Scripts.Models
                 return GameObject.FindObjectsOfType<GameObject>().Where(go => go.name == "Tiles").First().transform;
             }
         }
-        [JsonIgnore]
+
         public GameObject GameObject
         {
             get
@@ -54,11 +54,11 @@ namespace Assets.Scripts.Models
             }
         }
 
-        public Plant(PlantData plantData, int createdAtTick)
+        public Plant(PlantData plantData, int stage, int lastStageTransitionTick)
         {
             _plantData = plantData;
-            Stage = 0;
-            _lastStageTransitionTick = createdAtTick;
+            Stage = stage;
+            _lastStageTransitionTick = lastStageTransitionTick;
         }
 
         public bool TransitionIfNeeded(int ticks)
@@ -98,6 +98,20 @@ namespace Assets.Scripts.Models
             }
             Debug.Log($"Nothing to harvest on {Name}");
             return false;
+        }
+
+        public PlantSaved ToSaved()
+        {
+            return new PlantSaved()
+            {
+                Stage = Stage,
+                Type = _plantData.HarvestableType,
+            };
+        }
+
+        public static Plant FromSaved(PlantSaved saved)
+        {
+            return ResourceLoader.GetPlant(saved.Type, saved.Stage, 0);
         }
     }
 }

@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,20 @@ public class InventoryItem
     public InventoryItem(InventoryItemData data)
     {
         _data = data;
+    }
+
+    public InventoryItemSaved ToSaved()
+    {
+        return new InventoryItemSaved()
+        {
+            Quantity = Quantity,
+            Type = Type
+        };
+    }
+
+    public static InventoryItem FromSaved(InventoryItemSaved saved)
+    {
+        return ResourceLoader.GetInventoryItem(saved.Type, saved.Quantity);
     }
 }
 

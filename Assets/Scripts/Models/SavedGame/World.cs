@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class World
 {
-    public Inventory Inventory;
-    public Tile[,] Tiles;
+    public InventorySaved Inventory;
+    public TileSaved[,] Tiles;
     public int Coins;
 }

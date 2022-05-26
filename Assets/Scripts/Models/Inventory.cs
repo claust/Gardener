@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Inventory
 {
+    
+
     public int SlotsFilled
     {
         get
@@ -66,5 +68,23 @@ public class Inventory
     public bool HasRoomFor(InventoryItemType type)
     {
         return SlotsFilled < MaxSlots || List.Exists(i => i.Type == type);
+    }
+
+    public InventorySaved ToSaved()
+    {
+        return new InventorySaved()
+        {
+            MaxSlots = MaxSlots,
+            List = List.Select(i => i.ToSaved()).ToList()
+        };
+    }
+
+    public static Inventory FromSaved(InventorySaved saved)
+    {
+        return new Inventory()
+        {
+            MaxSlots = saved.MaxSlots,
+            List = saved.List.Select(i => InventoryItem.FromSaved(i)).ToList()
+        };
     }
 }

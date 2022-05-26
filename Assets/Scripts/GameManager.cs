@@ -33,13 +33,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     public int Coins = 100;
-    public Inventory Inventory = new();
+    public Inventory Inventory;
     private World World = new();
 
 
     ToolType _selectedTool = ToolType.GrassRemover;
-    readonly List<PlantData> _plants = new();
-    readonly List<InventoryItemData> _inventoryItems = new();
+
     Tile[,] _tiles;
 
     int _ticks = 0;
@@ -72,11 +71,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ResourceLoader.Initialize();
         RemoveEditorTiles();
         LoadWorld();
         CreateTiles();
-        InitializePlants();
-        InitializeInventoryItems();
         BuySeeds();
     }
 
@@ -99,11 +97,20 @@ public class GameManager : MonoBehaviour
                 }
             }
             Coins = 100;
+            Inventory = new();
         }
         else
         {
-            _tiles = World.Tiles;
+            _tiles = new Tile[Globals.WorldSize, Globals.WorldSize];
+            for (int x = 0; x < Globals.WorldSize; x++)
+            {
+                for (int z = 0; z < Globals.WorldSize; z++)
+                {
+                    _tiles[x, z] = Tile.FromSaved(World.Tiles[x, z]);
+                }
+            }
             Coins = World.Coins;
+            Inventory = Inventory.FromSaved(World.Inventory);
         }
     }
 
@@ -111,22 +118,18 @@ public class GameManager : MonoBehaviour
     {
         World = new()
         {
-            Tiles = _tiles,
+            Tiles = new TileSaved[Globals.WorldSize, Globals.WorldSize],
             Coins = Coins,
-            Inventory = Inventory
+            Inventory = Inventory.ToSaved()
         };
+        for (int x = 0; x < Globals.WorldSize; x++)
+        {
+            for (int z = 0; z < Globals.WorldSize; z++)
+            {
+                World.Tiles[x, z] = _tiles[x, z].ToSaved();
+            }
+        }
         SavedGameUtility.SaveWorld(World);
-    }
-
-
-    private void InitializePlants()
-    {
-        _plants.AddRange(Resources.LoadAll<PlantData>("Plants"));
-    }
-
-    private void InitializeInventoryItems()
-    {
-        _inventoryItems.AddRange(Resources.LoadAll<InventoryItemData>("InventoryItems"));
     }
 
     private void FixedUpdate()
@@ -229,9 +232,9 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[tileScript.X, tileScript.Z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
-            var plantData = _plants[UnityEngine.Random.Range(0, _plants.Count)];
+            var plant = ResourceLoader.GetPlant(InventoryItemType.Tomato, 0, _ticks);
             InventoryItemType? seedType;
-            switch (plantData.HarvestableType)
+            switch (plant.HarvestableType)
             {
                 case InventoryItemType.Tomato:
                     seedType = InventoryItemType.TomatoSeeds;
@@ -240,20 +243,19 @@ public class GameManager : MonoBehaviour
                     seedType = InventoryItemType.CucumberSeeds;
                     break;
                 default:
-                    Debug.Log($"Cannot plant {plantData.Name}. Unknown seed");
+                    Debug.Log($"Cannot plant {plant.Name}. Unknown seed");
                     return;
             }
             if (!Inventory.Remove((InventoryItemType)seedType))
             {
-                Debug.Log($"Cannot plant {plantData.Name}. No {seedType} in inventory");
+                Debug.Log($"Cannot plant {plant.Name}. No {seedType} in inventory");
                 return;
             };
 
             var pos = tileScript.gameObject.transform.position;
             Debug.Log($"Planting seed at {pos.x},{pos.z}");
             var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
-            tile.Plant = new Plant(plantData, _ticks);
-
+            tile.Plant = plant;
 
             Debug.Log($"Planted {tile.Plant.Name}");
             var seed = tile.Plant.GameObject;
@@ -309,10 +311,7 @@ public class GameManager : MonoBehaviour
             if (tile.Plant.Harvest(_ticks))
             {
                 Coins += 1;
-                var harvested = new InventoryItem(_inventoryItems.First(i => i.Type == plant.HarvestableType))
-                {
-                    Quantity = plant.HarvestableQuantity
-                };
+                var harvested = ResourceLoader.GetInventoryItem(plant.HarvestableType, plant.HarvestableQuantity);
                 Inventory.Add(harvested);
                 UI.GetComponent<MainView>().SetCoins(Coins);
             };
@@ -321,9 +320,7 @@ public class GameManager : MonoBehaviour
 
     private void BuySeeds()
     {
-        Inventory.Add(new InventoryItem(_inventoryItems[1])
-        {
-            Quantity = 2,
-        });
+        var seeds = ResourceLoader.GetInventoryItem(InventoryItemType.TomatoSeeds, 2);
+        Inventory.Add(seeds);
     }
 }
