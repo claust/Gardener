@@ -46,6 +46,16 @@ public class Inventory
         }
         return false;
     }
+    public bool Remove(InventoryItemType type)
+    {
+        InventoryItem existingItem = List.Where(i => i.Type == type).FirstOrDefault();
+        if (existingItem != null)
+        {
+            existingItem.Quantity -= 1;
+            return true;
+        }
+        return false;
+    }
 
     public bool HasRoomFor(InventoryItemType type)
     {

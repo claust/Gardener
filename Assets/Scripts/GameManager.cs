@@ -180,10 +180,32 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[tileScript.x, tileScript.z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
+            var plantData = _plants[UnityEngine.Random.Range(0, _plants.Count)];
+            InventoryItemType? seedType;
+            switch (plantData.HarvestableType)
+            {
+                case InventoryItemType.Tomato:
+                    seedType = InventoryItemType.TomatoSeeds;
+                    break;
+                case InventoryItemType.Cucumber:
+                    seedType = InventoryItemType.CucumberSeeds;
+                    break;
+                default:
+                    Debug.Log($"Cannot plant {plantData.Name}. Unknown seed");
+                    return;
+            }
+            if (!Inventory.Remove((InventoryItemType)seedType))
+            {
+                Debug.Log($"Cannot plant {plantData.Name}. No {seedType} in inventory");
+                return;
+            };
+
             var pos = tileScript.gameObject.transform.position;
             Debug.Log($"Planting seed at {pos.x},{pos.z}");
             var newPos = new Vector3(pos.x - 0.2f, pos.y + 0.2f, pos.z);
-            tile.Plant = new Plant(_plants[UnityEngine.Random.Range(0, _plants.Count)], _ticks);
+            tile.Plant = new Plant(plantData, _ticks);
+
+
             Debug.Log($"Planted {tile.Plant.Name}");
             var seed = tile.Plant.GameObject;
             seed.transform.position = newPos;
