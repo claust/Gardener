@@ -260,7 +260,10 @@ public class GameManager : MonoBehaviour
             if (tile.Plant.Harvest(_ticks))
             {
                 Coins += 1;
-                var harvested = new InventoryItem(_inventoryItems.First(i => i.Type == plant.HarvestableType));
+                var harvested = new InventoryItem(_inventoryItems.First(i => i.Type == plant.HarvestableType))
+                {
+                    Quantity = 1
+                };
                 Inventory.Add(harvested);
                 UI.GetComponent<MainView>().SetCoins(Coins);
             };
@@ -271,7 +274,7 @@ public class GameManager : MonoBehaviour
     {
         Inventory.Add(new InventoryItem(_inventoryItems[1])
         {
-            Quantity = 20,
+            Quantity = 2,
         });
     }
 }

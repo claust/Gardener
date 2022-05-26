@@ -41,7 +41,7 @@ public class Inventory
         }
         else
         {
-            existingItem.Quantity += 1;
+            existingItem.Quantity += item.Quantity;
             return true;
         }
         return false;
@@ -52,6 +52,11 @@ public class Inventory
         if (existingItem != null)
         {
             existingItem.Quantity -= 1;
+            if (existingItem.Quantity == 0)
+            {
+                List.Remove(existingItem);
+                Debug.Log($"Removed last {existingItem.Name} from inventory");
+            }
             return true;
         }
         return false;

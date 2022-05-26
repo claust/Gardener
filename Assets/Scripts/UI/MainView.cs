@@ -43,13 +43,13 @@ namespace Assets.Scripts.UI
 
         private void Bind(Inventory inventory)
         {
-            for (int i = 0; i < inventory.List.Count; i++)
+            for (int i = 0; i < inventory.MaxSlots; i++)
             {
-                var item = inventory.List[i];
+                var item = i < inventory.List.Count ? inventory.List[i] : null;
                 var element = _inventory.Q<VisualElement>($"InventoryItem{i}");
-                element.Q<Label>("ItemName").text = item.Name;
-                element.Q<VisualElement>("ItemIcon").style.backgroundImage = new StyleBackground(item.Icon);
-                element.Q<Label>("Quantity").text = item.Quantity.ToString();
+                element.Q<Label>("ItemName").text = item?.Name ?? "";
+                element.Q<VisualElement>("ItemIcon").style.backgroundImage = item != null ? new StyleBackground(item.Icon) : null;
+                element.Q<Label>("Quantity").text = item?.Quantity.ToString() ?? "";
             }
         }
 
