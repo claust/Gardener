@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI
         private GameManager _gameManager;
         private Label _coins;
         private VisualElement _inventory;
+        private readonly List<VisualElement> tools = new();
 
         public void SetCoins(int coins)
         {
@@ -30,7 +31,6 @@ namespace Assets.Scripts.UI
             var gameManagerObject = GameObject.FindGameObjectWithTag("GameController");
             _gameManager = gameManagerObject.GetComponent<GameManager>();
             _gameManager.IsMouseOverHUD = IsMouseOverMe;
-            SetupTools();
             SetupDatabinding();
         }
 
@@ -41,8 +41,9 @@ namespace Assets.Scripts.UI
             _inventory.visible = false;
         }
 
-        private void Bind(Inventory inventory)
+        public void Bind()
         {
+            var inventory = _gameManager.Inventory;
             for (int i = 0; i < inventory.MaxSlots; i++)
             {
                 var item = i < inventory.List.Count ? inventory.List[i] : null;
@@ -51,34 +52,59 @@ namespace Assets.Scripts.UI
                 element.Q<VisualElement>("ItemIcon").style.backgroundImage = item != null ? new StyleBackground(item.Icon) : null;
                 element.Q<Label>("Quantity").text = item?.Quantity.ToString() ?? "";
             }
+            _coins.text = _gameManager.Coins.ToString();
+            SetupTools(_gameManager.SelectedTool);
         }
 
-        private void SetupTools()
+        private void SetupTools(ToolType selectedTool)
         {
-            var toolGrassRemover = _uiDocument.rootVisualElement.Q<Button>("GrassRemoverToolButton");
-            toolGrassRemover.clickable.clicked += () =>
+            tools.Clear();
+            void configure(string name, ToolType type)
             {
-                Debug.Log("GrassRemover selected");
-                _gameManager.OnToolClicked(ToolType.GrassRemover);
-            };
-            var toolWateringCan = _uiDocument.rootVisualElement.Q<Button>("WateringCanToolButton");
-            toolWateringCan.clickable.clicked += () =>
+                var tool = _uiDocument.rootVisualElement.Q<Button>(name);
+                tools.Add(tool);
+                if (selectedTool == type)
+                {
+                    Debug.Log($"Selected tool is {type}");
+                    SelectTool(tool.style);
+                }
+                tool.clickable.clicked += () =>
+                {
+                    Debug.Log($"{type} selected");
+                    _gameManager.OnToolClicked(type);
+                    ClearToolSelection();
+                    SelectTool(tool.style);
+                };
+            }
+            configure("GrassRemoverToolButton", ToolType.GrassRemover);
+            configure("WateringCanToolButton", ToolType.WateringCan);
+            configure("SeederToolButton", ToolType.Seeder);
+            configure("ScissorsToolButton", ToolType.Scissors);
+        }
+
+        private void SelectTool(IStyle style)
+        {
+            var color = new StyleColor(Color.yellow);
+            var size = 3;
+            style.borderTopWidth = size;
+            style.borderTopColor = color;
+            style.borderBottomWidth = size;
+            style.borderBottomColor = color;
+            style.borderLeftWidth = size;
+            style.borderLeftColor = color;
+            style.borderRightWidth = size;
+            style.borderRightColor = color;
+        }
+
+        private void ClearToolSelection()
+        {
+            tools.ForEach(t =>
             {
-                Debug.Log("WateringCan selected");
-                _gameManager.OnToolClicked(ToolType.WateringCan);
-            };
-            var toolSeeder = _uiDocument.rootVisualElement.Q<Button>("SeederToolButton");
-            toolSeeder.clickable.clicked += () =>
-            {
-                Debug.Log("Seeder selected");
-                _gameManager.OnToolClicked(ToolType.Seeder);
-            };
-            var toolScissors = _uiDocument.rootVisualElement.Q<Button>("ScissorsToolButton");
-            toolScissors.clickable.clicked += () =>
-            {
-                Debug.Log("Scissors selected");
-                _gameManager.OnToolClicked(ToolType.Scissors);
-            };
+                t.style.borderBottomWidth = 0;
+                t.style.borderTopWidth = 0;
+                t.style.borderLeftWidth = 0;
+                t.style.borderRightWidth = 0;
+            });
         }
 
         void Update()
@@ -87,7 +113,7 @@ namespace Assets.Scripts.UI
             {
                 Debug.Log($"Tab pressed: Inventory {_inventory.resolvedStyle.display}");
                 _inventory.visible = !_inventory.visible;
-                Bind(_gameManager.Inventory);
+                Bind();
             };
         }
 

@@ -8,4 +8,5 @@ public class World
     public InventorySaved Inventory;
     public TileSaved[,] Tiles;
     public int Coins;
+    public ToolType SelectedTool;
 }

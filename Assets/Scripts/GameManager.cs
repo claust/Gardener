@@ -35,9 +35,9 @@ public class GameManager : MonoBehaviour
     public int Coins = 100;
     public Inventory Inventory;
     private World World = new();
+    private MainView HUD;
 
-
-    ToolType _selectedTool = ToolType.GrassRemover;
+    public ToolType SelectedTool = ToolType.GrassRemover;
 
     Tile[,] _tiles;
 
@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        HUD = UI.GetComponent<MainView>();
         ResourceLoader.Initialize();
         RemoveEditorTiles();
         LoadWorld();
@@ -111,7 +112,10 @@ public class GameManager : MonoBehaviour
             }
             Coins = World.Coins;
             Inventory = Inventory.FromSaved(World.Inventory);
+            SelectedTool = World.SelectedTool;
+            Debug.Log($"Previously selected toll: {SelectedTool}");
         }
+        UpdateHUD();
     }
 
     private void SaveWorld()
@@ -120,7 +124,8 @@ public class GameManager : MonoBehaviour
         {
             Tiles = new TileSaved[Globals.WorldSize, Globals.WorldSize],
             Coins = Coins,
-            Inventory = Inventory.ToSaved()
+            Inventory = Inventory.ToSaved(),
+            SelectedTool = SelectedTool,
         };
         for (int x = 0; x < Globals.WorldSize; x++)
         {
@@ -201,7 +206,7 @@ public class GameManager : MonoBehaviour
     public void OnToolClicked(ToolType toolClicked)
     {
         Debug.Log($"OnToolClicked: {toolClicked}");
-        _selectedTool = toolClicked;
+        SelectedTool = toolClicked;
     }
 
     public void OnTileClicked(TileScript tile)
@@ -209,7 +214,7 @@ public class GameManager : MonoBehaviour
         if (!IsMouseOverHUD())
         {
             Debug.Log("OnTileClicked");
-            switch (_selectedTool)
+            switch (SelectedTool)
             {
                 case ToolType.None:
                     Debug.Log("No tool selected");
@@ -227,7 +232,7 @@ public class GameManager : MonoBehaviour
                     Harvest(tile);
                     break;
                 default:
-                    Debug.Log($"Unknown selected tool: {_selectedTool}");
+                    Debug.Log($"Unknown selected tool: {SelectedTool}");
                     break;
             }
         }
@@ -320,7 +325,7 @@ public class GameManager : MonoBehaviour
                 Coins += 1;
                 var harvested = ResourceLoader.GetInventoryItem(plant.HarvestableType, plant.HarvestableQuantity);
                 Inventory.Add(harvested);
-                UI.GetComponent<MainView>().SetCoins(Coins);
+                UpdateHUD();
             };
         }
     }
@@ -329,5 +334,10 @@ public class GameManager : MonoBehaviour
     {
         var seeds = ResourceLoader.GetInventoryItem(InventoryItemType.TomatoSeeds, 2);
         Inventory.Add(seeds);
+    }
+
+    private void UpdateHUD()
+    {
+        HUD.Bind();
     }
 }

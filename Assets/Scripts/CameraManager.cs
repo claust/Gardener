@@ -9,9 +9,9 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     float MaxSpeed = 5f;
     [SerializeField]
-    Vector2 XRange = new Vector2(- 10, Globals.WorldSize + 10);
+    Vector2 XRange = new(- 10, Globals.WorldSize + 10);
     [SerializeField]
-    Vector2 ZRange = new Vector2(- 10, Globals.WorldSize);
+    Vector2 ZRange = new(- 10, Globals.WorldSize);
     [SerializeField]
     float _zoom = 8;
 
