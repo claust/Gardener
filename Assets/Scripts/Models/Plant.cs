@@ -96,18 +96,5 @@ namespace Assets.Scripts.Models
             Debug.Log($"Nothing to harvest on {Name}");
             return false;
         }
-
-        public InventoryItem ToInventoryItem()
-        {
-            var item = new InventoryItem()
-            {
-                Name = Name,
-                Description = Description,
-                Icon = _plantData.Icon,
-                Type = HarvestableType,
-                Quantity = 1,
-            };
-            return item;
-        }
     }
 }

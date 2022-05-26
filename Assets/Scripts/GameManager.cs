@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     ToolType _selectedTool = ToolType.GrassRemover;
     List<PlantData> _plants = new List<PlantData>();
+    List<InventoryItemData> _inventoryItems = new List<InventoryItemData>();
     Tile[,] _tiles;
 
     int _ticks = 0;
@@ -72,11 +73,18 @@ public class GameManager : MonoBehaviour
         RemoveEditorTiles();
         CreateTiles();
         InitializePlants();
+        InitializeInventoryItems();
+        BuySeeds();
     }
 
     private void InitializePlants()
     {
         _plants.AddRange(Resources.LoadAll<PlantData>("Plants"));
+    }
+
+    private void InitializeInventoryItems()
+    {
+        _inventoryItems.AddRange(Resources.LoadAll<InventoryItemData>("InventoryItems"));
     }
 
     private void FixedUpdate()
@@ -230,9 +238,18 @@ public class GameManager : MonoBehaviour
             if (tile.Plant.Harvest(_ticks))
             {
                 Coins += 1;
-                Inventory.Add(plant.ToInventoryItem());
+                var harvested = new InventoryItem(_inventoryItems.First(i => i.Type == plant.HarvestableType));
+                Inventory.Add(harvested);
                 UI.GetComponent<MainView>().SetCoins(Coins);
             };
         }
+    }
+
+    private void BuySeeds()
+    {
+        Inventory.Add(new InventoryItem(_inventoryItems[1])
+        {
+            Quantity = 20,
+        });
     }
 }
