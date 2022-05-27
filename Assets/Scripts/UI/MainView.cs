@@ -80,6 +80,7 @@ namespace Assets.Scripts.UI
             configure("WateringCanToolButton", ToolType.WateringCan);
             configure("SeederToolButton", ToolType.Seeder);
             configure("ScissorsToolButton", ToolType.Scissors);
+            configure("StoneToolButton", ToolType.Stone);
         }
 
         private void SelectTool(IStyle style)

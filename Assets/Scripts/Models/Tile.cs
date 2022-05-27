@@ -50,5 +50,6 @@ namespace Assets.Scripts.Models
     {
         Dirt,
         Grass,
+        Stone,
     }
 }

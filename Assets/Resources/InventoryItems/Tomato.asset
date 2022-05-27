@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tomato
   Description: A nice red tomato plant. Fresh and delicious.
-  Icon: {fileID: 21300000, guid: ce0c1cc2b3b494643864a4a5dd830746, type: 3}
+  Icon: {fileID: 21300000, guid: cda5028dccef2404b8f35fdb1744ed65, type: 3}
   Type: 0

@@ -1,4 +1,4 @@
 ﻿public enum ToolType
 {
-    None, GrassRemover, WateringCan, Seeder, Scissors
+    None, GrassRemover, WateringCan, Seeder, Scissors, Stone
 }

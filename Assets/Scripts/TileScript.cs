@@ -49,7 +49,7 @@ public class TileScript : MonoBehaviour
     {
         var newTile = Instantiate(tilePrefab, transform.position, Quaternion.identity);
         newTile.transform.parent = parent;
-        newTile.transform.position = newTile.transform.position - Vector3.up * 0.05f;
+        newTile.transform.position = newTile.transform.position; //  - Vector3.up * 0.05f;
         var tileScript = newTile.GetComponent<TileScript>();
         tileScript.Cursor = Cursor;
         tileScript.GameManager = GameManager;

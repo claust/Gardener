@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject GrassPrefab;
     [SerializeField]
+    GameObject StonePrefab;
+    [SerializeField]
     GameObject TomatoSeedPrefab;
     [SerializeField]
     GameObject TomatoSproutPrefab;
@@ -41,7 +43,8 @@ public class GameManager : MonoBehaviour
 
     Tile[,] _tiles;
 
-    int _ticks = 0;
+    int LastClickTick;
+    int Ticks = 0;
     readonly float _tileMargin = 0f;
     float _tileWidth = 0;
     float _tileHeight = 0;
@@ -139,12 +142,12 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _ticks += 1;
+        Ticks += 1;
         foreach (Tile t in _tiles)
         {
             if (t.Plant != null)
             {
-                t.Plant.TransitionIfNeeded(_ticks);
+                t.Plant.TransitionIfNeeded(Ticks);
             }
         };
     }
@@ -163,6 +166,9 @@ public class GameManager : MonoBehaviour
                 {
                     case TileType.Dirt:
                         prefab = DirtPrefab;
+                        break;
+                    case TileType.Stone:
+                        prefab = StonePrefab;
                         break;
                     default:
                     case TileType.Grass:
@@ -231,6 +237,9 @@ public class GameManager : MonoBehaviour
                 case ToolType.Scissors:
                     Harvest(tile);
                     break;
+                case ToolType.Stone:
+                    LayStoneTile(tile);
+                    break;
                 default:
                     Debug.Log($"Unknown selected tool: {SelectedTool}");
                     break;
@@ -244,7 +253,7 @@ public class GameManager : MonoBehaviour
         var tile = _tiles[tileScript.X, tileScript.Z];
         if (tile.Type == TileType.Dirt && tile.Plant == null)
         {
-            var plant = ResourceLoader.GetPlant(InventoryItemType.Tomato, 0, _ticks);
+            var plant = ResourceLoader.GetPlant(InventoryItemType.Tomato, 0, Ticks);
             InventoryItemType? seedType;
             switch (plant.HarvestableType)
             {
@@ -320,13 +329,39 @@ public class GameManager : MonoBehaviour
         var plant = tile.Plant;
         if (plant != null && Inventory.HasRoomFor(plant.HarvestableType))
         {
-            if (tile.Plant.Harvest(_ticks))
+            if (tile.Plant.Harvest(Ticks))
             {
                 Coins += 1;
                 var harvested = ResourceLoader.GetInventoryItem(plant.HarvestableType, plant.HarvestableQuantity);
                 Inventory.Add(harvested);
                 UpdateHUD();
             };
+        }
+    }
+
+    private void LayStoneTile(TileScript ts)
+    {
+        Debug.Log($"LayStoneTile {Ticks - LastClickTick}");
+        if (Ticks - LastClickTick < 20)
+        {
+            Debug.Log("Not yet");
+            return;
+        }
+        LastClickTick = Ticks;
+        var tile = _tiles[ts.X, ts.Z];
+        if (tile.Type == TileType.Dirt && tile.Plant == null)
+        {
+            Debug.Log("Laying stone tile");
+            _tiles[ts.X, ts.Z] = new Tile(TileType.Stone);
+            ts.CloneAsType(StonePrefab, _tiles[ts.X, ts.Z], _container.transform);
+            Destroy(ts.gameObject);
+        }
+        else if (tile.Type == TileType.Stone)
+        {
+            Debug.Log("Removing stone tile");
+            _tiles[ts.X, ts.Z] = new Tile(TileType.Dirt);
+            ts.CloneAsType(DirtPrefab, _tiles[ts.X, ts.Z], _container.transform);
+            Destroy(ts.gameObject);
         }
     }
 
