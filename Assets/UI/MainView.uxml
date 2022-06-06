@@ -27,7 +27,7 @@
                 <ui:Instance template="InventoryItem" name="InventoryItem5" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Shop" style="width: 50%; align-items: center; background-color: rgb(173, 99, 9); display: flex; border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-left-color: rgb(106, 50, 0); border-right-color: rgb(106, 50, 0); border-top-color: rgb(106, 50, 0); border-bottom-color: rgb(106, 50, 0); margin-top: 20px;">
+        <ui:VisualElement name="Shop" style="width: 50%; align-items: center; background-color: rgb(135, 88, 27); display: flex; border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-left-color: rgb(106, 50, 0); border-right-color: rgb(106, 50, 0); border-top-color: rgb(106, 50, 0); border-bottom-color: rgb(106, 50, 0); margin-top: 20px;">
             <ui:Label text="SHOP" display-tooltip-when-elided="true" style="-unity-font-style: bold; font-size: 28px; color: rgb(255, 208, 0);" />
             <ui:VisualElement name="Row1" style="flex-direction: row;">
                 <ui:Instance template="InventoryItem" name="InventoryItem0" />
@@ -36,8 +36,8 @@
             </ui:VisualElement>
             <ui:VisualElement name="Row2" style="flex-direction: row;">
                 <ui:Instance template="InventoryItem" name="InventoryItem3" />
-                <ui:Instance template="InventoryItem" name="InventoryItem4" />
                 <ui:Instance template="InventoryItem" name="InventoryItem5" />
+                <ui:Instance template="InventoryItem" name="InventoryItem4" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -46,15 +46,19 @@ namespace Assets.Scripts.UI
 
         public void Bind()
         {
-            var inventory = _gameManager.Inventory;
-            for (int i = 0; i < inventory.MaxSlots; i++)
+            void BindInventory(VisualElement container, Inventory inv)
             {
-                var item = i < inventory.List.Count ? inventory.List[i] : null;
-                var element = _inventory.Q<VisualElement>($"InventoryItem{i}");
-                element.Q<Label>("ItemName").text = item?.Name ?? "";
-                element.Q<VisualElement>("ItemIcon").style.backgroundImage = item != null ? new StyleBackground(item.Icon) : null;
-                element.Q<Label>("Quantity").text = item?.Quantity.ToString() ?? "";
+                for (int i = 0; i < inv.MaxSlots; i++)
+                {
+                    var item = i < inv.List.Count ? inv.List[i] : null;
+                    var element = container.Q<VisualElement>($"InventoryItem{i}");
+                    element.Q<Label>("ItemName").text = item?.Name ?? "";
+                    element.Q<VisualElement>("ItemIcon").style.backgroundImage = item != null ? new StyleBackground(item.Icon) : null;
+                    element.Q<Label>("Quantity").text = item?.Quantity.ToString() ?? "";
+                }
             }
+            BindInventory(_inventory, _gameManager.Inventory);
+            BindInventory(Shop, _gameManager.ShopInventory);
             _coins.text = _gameManager.Coins.ToString();
             SetupTools(_gameManager.SelectedTool);
         }
