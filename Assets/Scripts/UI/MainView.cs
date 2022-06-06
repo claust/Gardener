@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI
         private GameManager _gameManager;
         private Label _coins;
         private VisualElement _inventory;
+        private VisualElement Shop;
         private readonly List<VisualElement> tools = new();
 
         public void SetCoins(int coins)
@@ -39,6 +40,8 @@ namespace Assets.Scripts.UI
             _coins = _uiDocument.rootVisualElement.Q<Label>("Coins");
             _inventory = _uiDocument.rootVisualElement.Q<VisualElement>("Inventory");
             _inventory.visible = false;
+            Shop = _uiDocument.rootVisualElement.Q<VisualElement>("Shop");
+            Shop.visible = false;
         }
 
         public void Bind()
@@ -114,6 +117,7 @@ namespace Assets.Scripts.UI
             {
                 Debug.Log($"Tab pressed: Inventory {_inventory.resolvedStyle.display}");
                 _inventory.visible = !_inventory.visible;
+                Shop.visible = false;
                 Bind();
             };
         }
@@ -129,7 +133,8 @@ namespace Assets.Scripts.UI
 
         public void ShowShop()
         {
-            _inventory.visible = !_inventory.visible;
+            Shop.visible = !Shop.visible;
+            _inventory.visible = Shop.visible;
             Bind();
         }
     }

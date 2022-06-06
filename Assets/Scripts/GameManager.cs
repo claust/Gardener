@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public int Coins = 100;
     public Inventory Inventory;
+    public Inventory ShopInventory;
     private World World = new();
     private MainView HUD;
     private ShopScript Shop;
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour
             }
             Coins = 100;
             Inventory = new();
+            ShopInventory = new();
             BuySeeds();
         }
         else
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
             }
             Coins = World.Coins;
             Inventory = Inventory.FromSaved(World.Inventory);
+            ShopInventory = Inventory.FromSaved(World.ShopInventory);
             SelectedTool = World.SelectedTool;
             Debug.Log($"Previously selected toll: {SelectedTool}");
         }
@@ -134,6 +137,7 @@ public class GameManager : MonoBehaviour
             Tiles = new TileSaved[Globals.WorldSize, Globals.WorldSize],
             Coins = Coins,
             Inventory = Inventory.ToSaved(),
+            ShopInventory = ShopInventory.ToSaved(),
             SelectedTool = SelectedTool,
         };
         for (int x = 0; x < Globals.WorldSize; x++)

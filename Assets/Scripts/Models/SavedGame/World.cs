@@ -6,6 +6,7 @@ using UnityEngine;
 public class World
 {
     public InventorySaved Inventory;
+    public InventorySaved ShopInventory;
     public TileSaved[,] Tiles;
     public int Coins;
     public ToolType SelectedTool;
