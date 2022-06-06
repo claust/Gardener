@@ -30,7 +30,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     public GameObject Cursor;
-
+    [SerializeField]
+    GameObject ShopObject;
+    
     public Func<bool> IsMouseOverHUD;
 
     [SerializeField]
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
     public Inventory Inventory;
     private World World = new();
     private MainView HUD;
+    private ShopScript Shop;
 
     public ToolType SelectedTool = ToolType.GrassRemover;
 
@@ -75,6 +78,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         HUD = UI.GetComponent<MainView>();
+        Shop = ShopObject.GetComponent<ShopScript>();
+        Shop.GameManager = this;
+        
         ResourceLoader.Initialize();
         RemoveEditorTiles();
         LoadWorld();
@@ -207,6 +213,11 @@ public class GameManager : MonoBehaviour
             GameObject child = list[i];
             DestroyImmediate(child);
         }
+    }
+    public void OnShopClicked()
+    {
+        Debug.Log("OnShopClicked");
+        HUD.ShowShop();
     }
 
     public void OnToolClicked(ToolType toolClicked)

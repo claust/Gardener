@@ -126,5 +126,11 @@ namespace Assets.Scripts.UI
             _uiDocument.rootVisualElement.panel.PickAll(pointerUiPos, picked);
             return picked.Any(ve => ve.enabledInHierarchy && ve.resolvedStyle.backgroundColor.a != 0);
         }
+
+        public void ShowShop()
+        {
+            _inventory.visible = !_inventory.visible;
+            Bind();
+        }
     }
 }
