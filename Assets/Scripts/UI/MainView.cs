@@ -46,7 +46,7 @@ namespace Assets.Scripts.UI
 
         public void Bind()
         {
-            void BindInventory(VisualElement container, Inventory inv)
+            void BindInventory(VisualElement container, Inventory inv, Inventory target)
             {
                 for (int i = 0; i < inv.MaxSlots; i++)
                 {
@@ -55,12 +55,50 @@ namespace Assets.Scripts.UI
                     element.Q<Label>("ItemName").text = item?.Name ?? "";
                     element.Q<VisualElement>("ItemIcon").style.backgroundImage = item != null ? new StyleBackground(item.Icon) : null;
                     element.Q<Label>("Quantity").text = item?.Quantity.ToString() ?? "";
+                    // element.Q<Button>().clickable.activators.Clear();
+                    if (item != null)
+                    {
+                        element.Q<Button>().RegisterCallback<PointerUpEvent, ClickHandler>(HandleClick, new ClickHandler()
+                        {
+                            source = inv,
+                            target = target,
+                            item = item
+                        });
+                    }
                 }
             }
-            BindInventory(_inventory, _gameManager.Inventory);
-            BindInventory(Shop, _gameManager.ShopInventory);
+            BindInventory(_inventory, _gameManager.Inventory, _gameManager.ShopInventory);
+            BindInventory(Shop, _gameManager.ShopInventory, _gameManager.Inventory);
             _coins.text = _gameManager.Coins.ToString();
             SetupTools(_gameManager.SelectedTool);
+        }
+
+        private void HandleClick(PointerUpEvent evt, ClickHandler handler)
+        {
+            Debug.Log($"Clicked {handler.item.Name}");
+            ItemClicked(handler.item, handler.source, handler.target);
+        }
+
+        private void ItemClicked(InventoryItem item, Inventory source, Inventory target)
+        {
+            Debug.Log($"Clicked {item.Name}");
+            if (Shop.visible)
+            {
+                var quantity = item.Quantity;
+                if (quantity == 0)
+                {
+                    quantity = 1;
+                }
+                source.Remove(item.Type, quantity);
+                item.Quantity = quantity;
+                target.Add(item);
+            }
+            Bind();
+        }
+
+        private void MainView_clicked()
+        {
+            throw new NotImplementedException();
         }
 
         private void SetupTools(ToolType selectedTool)
@@ -141,5 +179,12 @@ namespace Assets.Scripts.UI
             _inventory.visible = Shop.visible;
             Bind();
         }
+    }
+
+    class ClickHandler
+    {
+        public Inventory source;
+        public Inventory target;
+        public InventoryItem item;
     }
 }

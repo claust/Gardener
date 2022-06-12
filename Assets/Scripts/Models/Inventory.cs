@@ -49,13 +49,13 @@ public class Inventory
         }
         return false;
     }
-    public bool Remove(InventoryItemType type)
+    public bool Remove(InventoryItemType type, int quantity = 1)
     {
         InventoryItem existingItem = List.Where(i => i.Type == type).FirstOrDefault();
         if (existingItem != null)
         {
-            existingItem.Quantity -= 1;
-            if (existingItem.Quantity == 0)
+            existingItem.Quantity -= quantity;
+            if (existingItem.Quantity <= 0)
             {
                 List.Remove(existingItem);
                 Debug.Log($"Removed last {existingItem.Name} from inventory");
